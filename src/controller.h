@@ -559,6 +559,9 @@ class Controller<Renderer>::query_state
       , _renderer(renderer)
     {}
 
+    // NB: query() and update() run in different threads, but they are
+    //     guaranteed not to run at the same time!
+
     // NB: This is executed in the audio thread
     void query()
     {
@@ -1869,6 +1872,7 @@ Controller<Renderer>::_load_dynamic_asdf(const std::string& scene_file_name)
     apf::parameter_map p;
     std::string id = scene_ptr->get_source_id(i);
     _query_state.source_ids.push_back(id);
+    // TODO:
     //p.set("properties-file", ???);
     p.set("dynamic_number", i);
     try
