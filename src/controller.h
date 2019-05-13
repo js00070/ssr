@@ -679,6 +679,19 @@ class Controller<Renderer>::query_state
               if (!new_source) { continue; }
 
               WARNING("TODO: activate source: " << source_id);
+
+              if (new_source->rotation)
+              {
+                control->source_rotation(source_id
+                    , quat{*new_source->rotation});
+              }
+              if (new_source->translation)
+              {
+                control->source_position(source_id
+                    , vec3{*new_source->translation});
+              }
+              // TODO: go through the rest of the properties
+
               old_source = new_source;
             }
           }
@@ -1055,6 +1068,11 @@ public:
 
   void source_position(id_t id, const Pos& position) override
   {
+    if (id == "")
+    {
+      ERROR("Empty source ID");
+      return;
+    }
     if constexpr (_is_leader)
     {
       auto* src = _controller._scene.get_source(id);
@@ -1871,7 +1889,6 @@ Controller<Renderer>::_load_dynamic_asdf(const std::string& scene_file_name)
   {
     apf::parameter_map p;
     std::string id = scene_ptr->get_source_id(i);
-    _query_state.source_ids.push_back(id);
     // TODO:
     //p.set("properties-file", ???);
     p.set("dynamic_number", i);
@@ -1885,6 +1902,8 @@ Controller<Renderer>::_load_dynamic_asdf(const std::string& scene_file_name)
       // TODO: remove all previously added sources?
       return false;
     }
+    assert(id != "");
+    _query_state.source_ids.push_back(id);
 
     _publish(&api::SceneInformationEvents::new_source, id);
 
