@@ -12,6 +12,13 @@ sudo make install
 cd ..
 cd ..
 
+git clone https://github.com/AudioSceneDescriptionFormat/asdf-rust.git
+cd asdf-rust
+git submodule update --init
+cargo cinstall --release --prefix=/usr/local --destdir=temp
+sudo cp -r temp/usr/local/* /usr/local/
+cd ..
+
 if [ "$TRAVIS_OS_NAME" == "linux" ]; then
   # liblo-dev is still at 0.28 in trusty, but we require 0.29
   wget https://downloads.sourceforge.net/liblo/liblo-0.29.tar.gz

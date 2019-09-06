@@ -1,4 +1,6 @@
-language: cpp
+language: rust
+rust:
+  - stable
 sudo: required
 dist: xenial
 
@@ -61,6 +63,7 @@ before_install:
 
 install:
   - ci/install-deps.sh
+  - cargo install cargo-c --force
 
 before_script:
   - ci/build-deps.sh
