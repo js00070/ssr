@@ -1,6 +1,7 @@
 // Usage example for the MimoProcessor with PortAudio.
 
 #include <iostream>
+#include <unistd.h>
 
 #include "apf/stringtools.h"
 

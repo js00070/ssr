@@ -1,5 +1,7 @@
 // Minimalistic example for the MimoProcessor with JACK.
 
+#include <unistd.h>
+
 #include "apf/mimoprocessor.h"
 #include "apf/combine_channels.h"  // for apf::CombineChannelsCopy
 #include "apf/jack_policy.h"

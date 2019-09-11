@@ -1,0 +1,1115 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The Renderers &mdash; SoundScape Renderer 0.5.0-54-g00816ea documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Graphical User Interface" href="gui.html" />
+    <link rel="prev" title="Compiling and Running the SSR" href="operation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> SoundScape Renderer
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="general.html">General</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="general.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#audio-scenes">Audio Scenes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="general.html#format">Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="general.html#coordinate-system">Coordinate System</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#audio-scene-description-format-asdf">Audio Scene Description Format (ASDF)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="general.html#syntax">Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="general.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#ip-interface">IP Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#bug-reports-feature-requests-and-comments">Bug Reports, Feature Requests and Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#contributors">Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#your-own-contributions">Your Own Contributions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operation.html">Compiling and Running the SSR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#choosing-the-operating-system">Choosing the Operating System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#the-debian-package">The Debian Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#getting-the-source">Getting the Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#configuring-and-compiling">Configuring and Compiling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#dependencies">Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#hints-on-configuration">Hints on Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#installing">Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#uninstalling">Uninstalling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#compiling-and-installing-from-the-git-repository">Compiling and Installing from the Git Repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#running-the-ssr">Running the SSR</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#keyboard-actions-in-non-gui-mode">Keyboard actions in non-GUI mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#recording-the-ssr-output">Recording the SSR output</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#configuration-files">Configuration Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#head-tracking">Head Tracking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#preparing-intersense-inertiacube3">Preparing InterSense InertiaCube3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#preparing-polhemus-fastrak-patriot">Preparing Polhemus Fastrak/Patriot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#preparing-vrpn">Preparing VRPN</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#using-the-ssr-with-different-audio-clients">Using the SSR with different audio clients</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#vlc-media-player">VLC Media Player</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#itunes">iTunes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#mplayer">mPlayer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#mac-os-x">Mac OS X</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#jack-on-mac-os-x">JACK on Mac OS X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#application-bundle">Application Bundle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#building-from-source">Building from Source</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="operation.html#what-to-install-first">What to install first?</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#using-the-gui">Using the GUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#running-via-the-command-line-terminal">Running via the Command Line (Terminal)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#using-a-head-tracker">Using a Head-Tracker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="operation.html#running-with-intersense-tracker-support">Running with InterSense tracker support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="operation.html#running-with-razor-ahrs-tracker-support">Running with Razor AHRS tracker support</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#ms-windows">MS Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#using-the-ssr-with-daws">Using the SSR with DAWs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation.html#known-issues-linux-mac-os-x">Known Issues (Linux &amp; Mac OS X)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#make-dmg-on-mac-os-x-chokes-on-symbolic-links"><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">dmg</span></code> on Mac OS X chokes on symbolic links</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#ssr-crashes-with-a-segmentation-fault-on-max-os-x">SSR crashes with a segmentation fault on Max OS X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#a-file-that-can-t-be-loaded-results-in-a-connection-to-a-live-input">A file that can’t be loaded results in a connection to a live input</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#conflicting-jack-and-ecasound-versions">Conflicting JACK and Ecasound versions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#annoying-ecasound-message">Annoying Ecasound message</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#ecasound-cannot-open-a-jack-port">Ecasound cannot open a JACK port</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#using-ssr-on-mac-os-x-el-capitan">Using SSR on Mac OS X El Capitan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#long-paths-to-audio-files-on-mac-os-x">Long paths to audio files on Mac OS X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#segmentation-fault-when-opening-a-scene">Segmentation Fault when Opening a Scene</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#choppy-sound-on-cheap-on-board-sound-cards">Choppy Sound on Cheap (On-Board) Sound Cards</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#dylibbundler-doesn-t-grok-qt-frameworks"><code class="docutils literal notranslate"><span class="pre">dylibbundler</span></code> doesn’t grok Qt Frameworks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#ssr-for-mac-os-x-qt-menu-nib-not-found">SSR for Mac OS X: qt_menu.nib not found</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#compilation-error-on-ubuntu-and-archlinux">Compilation Error on Ubuntu and Archlinux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#polhemus-tracker-does-not-work-with-ssr">Polhemus tracker does not work with SSR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#missing-gui-buttons-and-timeline">Missing GUI Buttons and Timeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#opengl-linker-error">OpenGL Linker Error</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#ip-interface-isn-t-selected-although-boost-libraries-are-installed">IP interface isn’t selected although boost libraries are installed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#second-instance-of-ssr-crashes">Second instance of SSR crashes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#audio-files-with-spaces">Audio files with spaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operation.html#error-valueerror-unknown-locale-utf-8-when-building-the-manual">Error <code class="docutils literal notranslate"><span class="pre">ValueError:</span> <span class="pre">unknown</span> <span class="pre">locale:</span> <span class="pre">UTF-8</span></code> when building the manual</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The Renderers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general">General</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#reproduction-setups">Reproduction Setups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#a-note-on-the-timing-of-the-audio-signals">A Note on the Timing of the Audio Signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#subwoofers">Subwoofers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distance-attenuation">Distance Attenuation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#doppler-effect">Doppler Effect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#signal-processing">Signal Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#binaural-renderer">Binaural Renderer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-hrir-sets-shipped-with-ssr">The HRIR sets shipped with SSR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-hrir-sets">Preparing HRIR sets</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#binaural-room-synthesis-renderer">Binaural Room Synthesis Renderer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vector-base-amplitude-panning-renderer">Vector Base Amplitude Panning Renderer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#wave-field-synthesis-renderer">Wave Field Synthesis Renderer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prefiltering">Prefiltering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tapering">Tapering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ambisonics-amplitude-panning-renderer">Ambisonics Amplitude Panning Renderer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#conventional-driving-function">Conventional driving function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#in-phase-driving-function">In-phase driving function</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#distance-coded-ambisonics-renderer">Distance-coded Ambisonics Renderer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generic-renderer">Generic Renderer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gui.html">Graphical User Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gui.html#general-layout">General Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gui.html#mouse-actions">Mouse Actions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gui.html#source-properties-dialog">Source Properties Dialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gui.html#drag-drop-of-scenes">Drag &amp; Drop of Scenes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gui.html#keyboard-actions">Keyboard Actions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="network.html#scene">Scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network.html#state">State</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network.html#source">Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network.html#reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SoundScape Renderer</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>The Renderers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/renderers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-renderers">
+<span id="renderers"></span><h1>The Renderers<a class="headerlink" href="#the-renderers" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="reproduction-setups">
+<span id="id1"></span><h3>Reproduction Setups<a class="headerlink" href="#reproduction-setups" title="Permalink to this headline">¶</a></h3>
+<p>The geometry of the actual reproduction setup is specified in <code class="docutils literal notranslate"><span class="pre">.asd</span></code>
+files, just like sound scenes. By default, it is loaded from the file
+<code class="docutils literal notranslate"><span class="pre">/usr/local/share/ssr/default_setup.asd</span></code>. Use the <code class="docutils literal notranslate"><span class="pre">--setup</span></code> command
+line option to load another reproduction setup file. Note that the
+loudspeaker setups have to be convex. This is not checked by the SSR.
+The loudspeakers appear at the outputs of your sound card in the same
+order as they are specified in the <code class="docutils literal notranslate"><span class="pre">.asd</span></code> file, starting with channel
+1.</p>
+<p>A sample reproduction setup description:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;?xml <span class="nv">version</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span>?&gt;
+&lt;asdf <span class="nv">version</span><span class="o">=</span><span class="s2">&quot;0.1&quot;</span>&gt;
+  &lt;header&gt;
+    &lt;name&gt;Circular Loudspeaker Array&lt;/name&gt;
+  &lt;/header&gt;
+  &lt;reproduction_setup&gt;
+    &lt;circular_array <span class="nv">number</span><span class="o">=</span><span class="s2">&quot;56&quot;</span>&gt;
+      &lt;first&gt;
+        &lt;position <span class="nv">x</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span> <span class="nv">y</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>/&gt;
+        &lt;orientation <span class="nv">azimuth</span><span class="o">=</span><span class="s2">&quot;-180&quot;</span>/&gt;
+      &lt;/first&gt;
+    &lt;/circular_array&gt;
+  &lt;/reproduction_setup&gt;
+&lt;/asdf&gt;
+</pre></div>
+</div>
+<p>We provide the following setups in the directory
+<code class="docutils literal notranslate"><span class="pre">data/reproduction_setups/</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">2.0.asd</span></code>: standard stereo setup at 1.5 mtrs distance</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2.1.asd</span></code>: standard stereo setup at 1.5 mtrs distance plus
+subwoofer</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">5.1.asd</span></code>: standard 5.1 setup on circle with a diameter of 3 mtrs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rounded_rectangle.asd</span></code>: Demonstrates how to combine circular arcs
+and linear array segments.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">circle.asd</span></code>: This is a circular array of 3 mtrs diameter composed
+of 56 loudspeakers.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">loudspeaker_setup_with_nearly_all_features.asd</span></code>: This setup
+describes all supported options, open it with your favorite text
+editor and have a look inside.</p></li>
+</ul>
+<p>There is some limited freedom in assigning channels to
+loudspeakers: If you insert the element <code class="docutils literal notranslate"><span class="pre">&lt;skip</span> <span class="pre">number=&quot;5&quot;/&gt;</span></code>, the
+specified number of output channels are skipped and the following
+loudspeakers get higher channel numbers accordingly.</p>
+<p>Of course, the binaural and BRS renderers do not load a loudspeaker
+setup. By default, they assume the listener to reside in the coordinate
+origin looking straight forward.</p>
+</div>
+<div class="section" id="a-note-on-the-timing-of-the-audio-signals">
+<h3>A Note on the Timing of the Audio Signals<a class="headerlink" href="#a-note-on-the-timing-of-the-audio-signals" title="Permalink to this headline">¶</a></h3>
+<p>The WFS renderer is the only renderer in which the timing of the audio
+signals is somewhat peculiar. None of the other renderers imposes any
+algorithmic delay on individual source signals. Of course, if you use a
+renderer that is convolution based such as the BRS renderer, the
+employed HRIRs do alter the timing of the signals due to their inherent
+properties.</p>
+<p>This is different with the WFS renderer. Here, also the propagation
+duration of sound from the position of the virtual source to the
+loudspeaker array is taken into account. This means that the farther a virtual
+source is located, the longer is the delay imposed on its input signal.
+This also holds true for plane waves: Theoretically, plane waves do
+originate from infinity. Though, the SSR does consider the origin point
+of the plane wave that is specified in ASDF. This origin point also
+specifies the location of the symbol that represents the respective
+plane wave in the GUI.</p>
+<p>We are aware that this procedure can cause confusion and reduces the
+ability of a given scene of translating well between different types of
+renderers. In the upcoming version 0.4 of the SSR we will implement an
+option that will allow you specifying for each individual source whether
+the propagation duration of sound shall be considered by a renderer or
+not.</p>
+</div>
+<div class="section" id="subwoofers">
+<h3>Subwoofers<a class="headerlink" href="#subwoofers" title="Permalink to this headline">¶</a></h3>
+<p>All loudspeaker-based renderers support the use of subwoofers. Outputs of the
+SSR that are assigned to subwoofers receive a signal having full bandwidth. So,
+you will have to make sure yourself that your system lowpasses these signals
+appropriately before they are emitted by the subwoofers.</p>
+<p>You might need to adjust the level of your subwoofer(s) depending on the
+renderers that you are using as the overall radiated power of the normal
+speakers cannot be predicted easily so that we cannot adjust for it
+automatically. For example, no matter of how many loudspeakers your setup is
+composed of the VBAP renderer will only use two loudspeakers at a time to
+present a given virtual sound source. The WFS renderer on the other hand might
+use 10 or 20 loudspeakers, which can clearly lead to a different sound pressure
+level at a given receiver location.</p>
+<p>For convenience, ASDF allows for specifying permantent weight for loudspeakers
+and subwoofers using the <code class="docutils literal notranslate"><span class="pre">weight</span></code> attribute:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;loudspeaker <span class="nv">model</span><span class="o">=</span><span class="s2">&quot;subwoofer&quot;</span> <span class="nv">weight</span><span class="o">=</span><span class="s2">&quot;0.5&quot;</span>&gt;
+  &lt;position <span class="nv">x</span><span class="o">=</span><span class="s2">&quot;0&quot;</span> <span class="nv">y</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>/&gt;
+  &lt;orientation <span class="nv">azimuth</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>/&gt;
+&lt;/loudspeaker&gt;
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">weight</span></code> is a linear factor that is always applied to the signal of this
+speaker. Above example will obviously attenuate the signal by approx. 6 dB. You
+can use two ASDF description for the same reproduction setup that
+differ only with respect to the subwoofer weights if you’re using different
+renderers on the same loudspeaker system.</p>
+</div>
+<div class="section" id="distance-attenuation">
+<h3>Distance Attenuation<a class="headerlink" href="#distance-attenuation" title="Permalink to this headline">¶</a></h3>
+<p>Note that in all renderers – except for the BRS and generic renderers –, the
+distance attenuation in the virtual space is <span class="math notranslate nohighlight">\(\frac{1}{r}\)</span> with respect
+to the distance <span class="math notranslate nohighlight">\(r\)</span> of the respective virtual point source to the
+reference position. Point sources closer than 0.5 m to the reference position
+do not experience any increase of amplitude. Virtual plane waves do not
+experience any algorithmic distance attenuation in any renderer.</p>
+<p>You can specify your own preferred distance attenuation exponent <span class="math notranslate nohighlight">\(exp\)</span>
+(in <span class="math notranslate nohighlight">\(\frac{1}{r^{exp}}\)</span>) either via the command line argument
+<code class="docutils literal notranslate"><span class="pre">--decay-exponent=VALUE</span></code> or the configuration option <code class="docutils literal notranslate"><span class="pre">DECAY_EXPONENT</span></code> (see
+the file <code class="docutils literal notranslate"><span class="pre">data/ssr.conf.example</span></code>). The higher the exponent, the faster is the
+amplitude decay over distance. The default exponent is
+<span class="math notranslate nohighlight">\(exp = 1\)</span> <a class="footnote-reference brackets" href="#id4" id="id2">1</a>. Fig. <a class="reference internal" href="#id3"><span class="std std-ref">3.1</span></a> illustrates the effect
+of different choices of the exponent. In simple words, the smaller the exponent
+the slower is the amplitude decay over distance. Note that the default decay of
+<span class="math notranslate nohighlight">\(\frac{1}{r}\)</span> is theoretically correct only for infinitessimally small
+sound sources. Spatially extended sources, like most real world sources, exhibit
+a slower decay. So you might want to choose the exponent to be somewhere between
+0.5 and 1. You can completely suppress any sort of distance attenuation by
+setting the decay exponent to 0.</p>
+<p>The amplitude reference distance, i.e. the distance from the reference
+at which plane waves are as loud as the other source types (like point
+sources), can be set in the SSR configuration file
+(Section <a class="reference internal" href="operation.html#ssr-configuration-file"><span class="std std-ref">Configuration File</span></a>). The desired
+amplitude reference distance for a given sound scene can be specified in
+the scene description (Section <a class="reference internal" href="general.html#asdf"><span class="std std-ref">ASDF</span></a>). The default value is 3 m.</p>
+<p>The overall amplitude normalization is such that plane waves always exhibit the
+same amplitude independent of what amplitude reference distance and what decay
+exponent have been chosen. Consequently, also virtual point source always
+exhibit the same amplitude at amplitude reference distance, whatever it has
+been set to.</p>
+<div class="figure align-center" id="id23">
+<span id="id3"></span><img alt="_images/distance_attenuation.png" src="_images/distance_attenuation.png" />
+<p class="caption"><span class="caption-text">Illustration of the amplitude of virtual point sources as a function of
+source distance from the reference point for different exponents
+<span class="math notranslate nohighlight">\(exp\)</span>. The exponents range from 0 to 2 (black color to gray color).
+The amplitude reference distance is set to 3 m. Recall that sources
+closer than 0.5 m to the reference position do not experience any further
+increase of amplitude.</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
+</div>
+<dl class="footnote brackets">
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id2">1</a></span></dt>
+<dd><p>A note regarding previous versions of the WFS renderer: In the present SSR
+version, the amplitude decay is handled centrally and equally for all
+renderers that take distance attenuation into account (see Table
+<a class="reference internal" href="#source-props"><span class="std std-ref">2</span></a>). Previously, the WFS renderer relied on the distance
+attenuation that was inherent to the WFS driving function. This amplitude
+decay is very similar to an exponent of 0.5 (instead of the current default
+exponent of 1.0). So you  might want to set the decay exponent to 0.5 in WFS
+to make your scenes sound like they used to do previously.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="doppler-effect">
+<h3>Doppler Effect<a class="headerlink" href="#doppler-effect" title="Permalink to this headline">¶</a></h3>
+<p>In the current version of the SSR the Doppler Effect in moving sources
+is not supported by any of the renderers.</p>
+</div>
+<div class="section" id="signal-processing">
+<h3>Signal Processing<a class="headerlink" href="#signal-processing" title="Permalink to this headline">¶</a></h3>
+<p>All rendering algorithms are implemented on a frame-wise basis with an
+internal precision of 32 bit floating point. The signal processing is
+illustrated in Fig. <a class="reference internal" href="#id5"><span class="std std-ref">3.2</span></a>.</p>
+<p>The input signal is divided into individual frames of size <em>nframes</em>,
+whereby <em>nframes</em> is the frame size with which JACK is running. Then
+e.g. frame number <span class="math notranslate nohighlight">\(n+1\)</span> is processed both with previous rendering
+parameters <span class="math notranslate nohighlight">\(n\)</span> as well as with current parameters <span class="math notranslate nohighlight">\(n+1\)</span>.
+It is then crossfaded between both processed frames with cosine-shaped
+slopes. In other words the effective frame size of the signal processing
+is <span class="math notranslate nohighlight">\(2\cdot\)</span><em>nframes</em> with 50% overlap. Due to the
+fade-in of the frame processed with the current parameters <span class="math notranslate nohighlight">\(n+1\)</span>,
+the algorithmic latency is slightly higher than for processing done with
+frames purely of size <em>nframes</em> and no crossfade.</p>
+<div class="figure align-center" id="id24">
+<span id="id5"></span><img alt="_images/signal_processing.png" src="_images/signal_processing.png" />
+<p class="caption"><span class="caption-text">Illustration of the frame-wise signal processing
+as implemented in the SSR renderers (see text)</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
+</div>
+<p>The implementation approach described above is one version of the
+standard way of implementing time-varying audio processing. Note however
+that this means that with <em>all</em> renderers, moving sources are not
+physically correctly reproduced. The physically correct reproduction of
+moving virtual sources as in <a class="reference internal" href="#ahrens2008a" id="id6"><span>[Ahrens2008a]</span></a> and <a class="reference internal" href="#ahrens2008b" id="id7"><span>[Ahrens2008b]</span></a> requires a
+different implementation
+approach which is computationally significantly more costly.</p>
+<dl class="citation">
+<dt class="label" id="ahrens2008a"><span class="brackets"><a class="fn-backref" href="#id6">Ahrens2008a</a></span></dt>
+<dd><p>Jens Ahrens and Sascha Spors. Reproduction of moving virtual
+sound sources with special attention to the doppler effect. In 124th
+Convention of the AES, Amsterdam, The Netherlands, May 17–20, 2008.</p>
+</dd>
+<dt class="label" id="ahrens2008b"><span class="brackets"><a class="fn-backref" href="#id7">Ahrens2008b</a></span></dt>
+<dd><p>Jens Ahrens and Sascha Spors. Reproduction of virtual sound
+sources moving at supersonic speeds in Wave Field Synthesis. In 125th
+Convention of the AES, San Francisco, CA, Oct. 2–5, 2008.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="binaural-renderer">
+<span id="id8"></span><h2>Binaural Renderer<a class="headerlink" href="#binaural-renderer" title="Permalink to this headline">¶</a></h2>
+<p>Executable: <code class="docutils literal notranslate"><span class="pre">ssr-binaural</span></code></p>
+<p>Binaural rendering is an approach where the acoustical influence of the
+human head is electronically simulated to position virtual sound sources
+in space. <strong>Be sure that you are using headphones to listen.</strong></p>
+<p>The acoustical influence of the human head is coded in so-called
+head-related impulse responses (HRIRs) or equivalently by head-related transfer functions.
+The HRIRs are loaded from the file <code class="docutils literal notranslate"><span class="pre">/usr/local/share/ssr/default_hrirs.wav</span></code>. If you want
+to use different HRIRs then use the <code class="docutils literal notranslate"><span class="pre">--hrirs=FILE</span></code> command line option or the
+SSR configuration file
+(Section <a class="reference internal" href="operation.html#ssr-configuration-file"><span class="std std-ref">Configuration File</span></a>) to specify
+your custom location. The SSR connects its outputs automatically to
+outputs 1 and 2 of your sound card.</p>
+<p>For virtual sound sources that are closer to the reference position (=
+the listener position) than 0.5 m, the HRTFs are interpolated with a
+Dirac impulse. This ensures a smooth transition of virtual sources from
+the outside of the listener’s head to the inside.</p>
+<p>SSR uses HRIRs with an angular resolution of <span class="math notranslate nohighlight">\(1^\circ\)</span>. Thus,
+the HRIR file contains 720 impulse responses (360 for each ear) stored
+as a 720-channel .wav-file. The HRIRs all have to be of equal length and
+have to be arranged in the following order:</p>
+<ul class="simple">
+<li><p>1st channel: left ear, virtual source position <span class="math notranslate nohighlight">\(0^\circ\)</span></p></li>
+<li><p>2nd channel: right ear, virtual source position <span class="math notranslate nohighlight">\(0^\circ\)</span></p></li>
+<li><p>3rd channel: left ear, virtual source position <span class="math notranslate nohighlight">\(1^\circ\)</span></p></li>
+<li><p>4th channel: right ear, virtual source position <span class="math notranslate nohighlight">\(1^\circ\)</span></p></li>
+<li><p>…</p></li>
+<li><p>720th channel: right ear, virtual source position <span class="math notranslate nohighlight">\(359^\circ\)</span></p></li>
+</ul>
+<p>If your HRIRs have lower angular resolution you have to interpolate them
+to the target resolution or use the same HRIR for serveral adjacent
+directions in order to fulfill the format requirements. Higher
+resolution is not supported. Make sure that the sampling rate of the
+HRIRs matches that of JACK. So far, we know that both 16bit and 24bit
+word lengths work.</p>
+<p>The SSR automatically loads and uses all HRIR coefficients it finds in
+the specified file. You can use the <code class="docutils literal notranslate"><span class="pre">--hrir-size=VALUE</span></code> command line
+option in order to limit the number of HRIR coefficients read and used
+to <code class="docutils literal notranslate"><span class="pre">VALUE</span></code>. You don’t need to worry if your specified HRIR length
+<code class="docutils literal notranslate"><span class="pre">VALUE</span></code> exceeds the one stored in the file. You will receive a warning
+telling you what the score is. The SSR will render the audio in any
+case.</p>
+<p>The actual size of the HRIRs is not restricted (apart from processing
+power). The SSR cuts them into partitions of size equal to the JACK
+frame buffer size and zero-pads the last partition if necessary.</p>
+<p>Note that there’s some potential to optimize the performance of the SSR
+by adjusting the JACK frame size and accordingly the number of
+partitions when a specific number of HRIR taps are desired. The least
+computational load arises when the audio frames have the same size like
+the HRIRs. By choosing shorter frames and thus using partitioned
+convolution the system latency is reduced but computational load is
+increased.</p>
+<div class="section" id="the-hrir-sets-shipped-with-ssr">
+<h3>The HRIR sets shipped with SSR<a class="headerlink" href="#the-hrir-sets-shipped-with-ssr" title="Permalink to this headline">¶</a></h3>
+<p>SSR comes with two different HRIR sets: FABIAN and KEMAR (QU). The differ with respect to
+the manikin that was used in the measurement (FABIAN vs. KEMAR). The reference for the
+FABIAN measurement is <a class="reference internal" href="#lindau2007" id="id9"><span>[Lindau2007]</span></a>, and the reference for the KEMAR (QU) is
+<a class="reference internal" href="#wierstorf2011" id="id10"><span>[Wierstorf2011]</span></a>. The low-frequency extension from <a class="reference internal" href="#spatialaudio" id="id11"><span>[SpatialAudio]</span></a> has been applied to the
+KEMAR (QU) HRTFs.</p>
+<p>You will find all sets in the folder <code class="docutils literal notranslate"><span class="pre">data/impulse_responses/hrirs/</span></code>.
+The suffix <code class="docutils literal notranslate"><span class="pre">_eq</span></code> in the file name indicates the equalized data. The unequalized data is
+of course also there. See the file
+<code class="docutils literal notranslate"><span class="pre">data/impulse_responses/hrirs/hrirs_fabian_documentation.pdf</span></code> for a few more details on
+the FABIAN measurement.</p>
+<p>Starting with SSR release 0.5.0, the default HRIR set that is loaded is headphone
+compensated, i.e., we equalized the HRIRs a bit in order to compensate for the alterations
+that a typical pair of headphones would apply to the ear signals. Note that by design,
+headphones do not have a flat transfer function. However, when performing binaural
+rendering, we need the headphones to be transparent. Our equalization may not be
+perfect for all headphones or earbuds as these can exhibit very different properties
+between different models.</p>
+<p>We chose a frequency sampling-based minimum-phase filter design. The transfer functions
+and impulse responses of the two compensation filters are depicted in Fig. <a class="reference internal" href="#hrir-comp-filters"><span class="std std-ref">3.3</span></a>. The impulse responses themselves can be found in the same folder
+like the HRIRs (see above). The length is 513 taps so that the unequalized
+HRIRs are 512 taps long, the equalized ones are 1024 taps long.</p>
+<div class="figure align-center" id="id25">
+<span id="hrir-comp-filters"></span><img alt="_images/hrir_comp_filters.png" src="_images/hrir_comp_filters.png" />
+<p class="caption"><span class="caption-text">Magnitude transfer functions and impulse responses of the headphone compensation /
+equalization filters</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
+</div>
+<p>Recall that there are several ways of defining which HRIR set is loaded, for example the
+<code class="docutils literal notranslate"><span class="pre">HRIR_FILE_NAME</span></code> in the <a class="reference internal" href="operation.html#ssr-configuration-file"><span class="std std-ref">SSR configuration files</span></a> property,
+or the command line option <code class="docutils literal notranslate"><span class="pre">--hrirs=FILE</span></code>.</p>
+<dl class="citation">
+<dt class="label" id="lindau2007"><span class="brackets"><a class="fn-backref" href="#id9">Lindau2007</a></span></dt>
+<dd><p>Alexander Lindau and Stefan Weinzierl. FABIAN - Schnelle
+Erfassung binauraler Raumimpulsantworten in mehreren Freiheitsgraden. In
+Fortschritte der Akustik, DAGA Stuttgart, 2007.</p>
+</dd>
+<dt class="label" id="wierstorf2011"><span class="brackets"><a class="fn-backref" href="#id10">Wierstorf2011</a></span></dt>
+<dd><p>Hagen Wierstorf, Matthias Geier, Alexander Raake, and Sascha Spors. A
+Free Database of Head-Related Impulse Response Measurements in the Horizontal Plane
+with Multiple Distances. In 130th Convention of the Audio Engineering Society (AES),
+May 2011.</p>
+</dd>
+<dt class="label" id="spatialaudio"><span class="brackets"><a class="fn-backref" href="#id11">SpatialAudio</a></span></dt>
+<dd><p><a class="reference external" href="https://github.com/spatialaudio/lf-corrected-kemar-hrtfs">https://github.com/spatialaudio/lf-corrected-kemar-hrtfs</a> (commit 5b5ec8)</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="preparing-hrir-sets">
+<h3>Preparing HRIR sets<a class="headerlink" href="#preparing-hrir-sets" title="Permalink to this headline">¶</a></h3>
+<p>You can easily prepare your own HRIR sets for use with the SSR by
+adopting the MATLAB script <code class="docutils literal notranslate"><span class="pre">data/matlab_scripts/prepare_hrirs_cipic.m</span></code>
+to your needs. This script converts the HRIRs of the KEMAR manikin
+included in the CIPIC database <a class="reference internal" href="#algazicipic" id="id12"><span>[AlgaziCIPIC]</span></a> to the format that the SSR
+expects. See the script for further information and how to obtain the raw HRIRs. Note that
+the KEMAR (CIPIC) HRIRs are not identical to the KEMAR (QU) ones.</p>
+<dl class="citation">
+<dt class="label" id="algazicipic"><span class="brackets"><a class="fn-backref" href="#id12">AlgaziCIPIC</a></span></dt>
+<dd><p>V. Ralph Algazi. The CIPIC HRTF database.
+<a class="reference external" href="https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data/">https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data/</a>.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="binaural-room-synthesis-renderer">
+<span id="brs"></span><h2>Binaural Room Synthesis Renderer<a class="headerlink" href="#binaural-room-synthesis-renderer" title="Permalink to this headline">¶</a></h2>
+<p>Executable: <code class="docutils literal notranslate"><span class="pre">ssr-brs</span></code></p>
+<p>The Binaural Room Synthesis (BRS) renderer is a binaural renderer (refer
+to Section <a class="reference internal" href="#binaural-renderer"><span class="std std-ref">Binaural Renderer</span></a>) which uses one
+dedicated
+HRIR set of each individual sound source. The motivation is to have more
+realistic reproduction than in simple binaural rendering. In this
+context HRIRs are typically referred to as binaural room impulse
+responses (BRIRs).</p>
+<p>Note that the BRS renderer does not consider any specification of a
+virtual source’s position. The positions of the virtual sources
+(including their distance) are exclusively coded in the BRIRs.
+Consequently, the BRS renderer does not apply any distance attenuation.
+It only applies the respective source’s gain and the master volume. No
+interpolation with a Dirac as in the binaural renderer is performed for
+very close virtual sources. The only quantity which is explicitely
+considered is the orientation of the receiver, i.e. the reference.
+Therefore, specification of meaningful source and receiver positions is
+only necessary when a correct graphical illustration is desired.</p>
+<p>The BRIRs are stored in the a format similar to the one for the HRIRs
+for the binaural renderer (refer to
+Section <a class="reference internal" href="#binaural-renderer"><span class="std std-ref">Binaural Renderer</span></a>). However, there is a
+fundamental difference: In order to be consequent, the different
+channels do not hold the data for different positions of the virtual
+sound source but they hold the information for different head
+orientations. Explicitely,</p>
+<ul class="simple">
+<li><p>1st channel: left ear, head orientation <span class="math notranslate nohighlight">\(0^\circ\)</span></p></li>
+<li><p>2nd channel: right ear, head orientation <span class="math notranslate nohighlight">\(0^\circ\)</span></p></li>
+<li><p>3rd channel: left ear, head orientation <span class="math notranslate nohighlight">\(1^\circ\)</span></p></li>
+<li><p>4th channel: right ear, head orientation <span class="math notranslate nohighlight">\(1^\circ\)</span></p></li>
+<li><p>…</p></li>
+<li><p>720th channel: right ear, head orientation <span class="math notranslate nohighlight">\(359^\circ\)</span></p></li>
+</ul>
+<p>In order to assign a set of BRIRs to a given sound source an appropriate
+scene description in <code class="docutils literal notranslate"><span class="pre">.asd</span></code>-format has to be prepared (refer also to
+Section <a class="reference internal" href="general.html#audio-scenes"><span class="std std-ref">Audio Scenes</span></a>). As shown in <code class="docutils literal notranslate"><span class="pre">brs_example.asd</span></code>
+(from the example scenes), a virtual source has the optional property
+<code class="docutils literal notranslate"><span class="pre">properties_file</span></code> which holds the location of the file containing the
+desired BRIR set. The location to be specified is relative to the folder
+of the scene file. Note that – as described above – specification of the
+virtual source’s position does not affect the audio processing. If you
+do not specify a BRIR set for each virtual source, then the renderer
+will complain and refuse processing the respective source.</p>
+<p>We have measured the BRIRs of the FABIAN
+manikin in one of our mid-size meeting rooms called Sputnik with 8
+different source positions. Due to the file size, we have not included
+them in the release. You can obtain the data from <a class="reference internal" href="#brirs" id="id13"><span>[BRIRs]</span></a>.</p>
+<dl class="citation">
+<dt class="label" id="brirs"><span class="brackets"><a class="fn-backref" href="#id13">BRIRs</a></span></dt>
+<dd><p>The Sputnik BRIRs can be obtained from here: <a class="reference external" href="https://dev.qu.tu-berlin.de/projects/measurements/wiki/Impulse_Response_Measurements">https://dev.qu.tu-berlin.de/projects/measurements/wiki/Impulse_Response_Measurements</a>.
+More BRIR repositories are compiled here: <a class="reference external" href="http://www.soundfieldsynthesis.org/other-resources/#impulse-responses">http://www.soundfieldsynthesis.org/other-resources/#impulse-responses</a>.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="vector-base-amplitude-panning-renderer">
+<span id="vbap"></span><h2>Vector Base Amplitude Panning Renderer<a class="headerlink" href="#vector-base-amplitude-panning-renderer" title="Permalink to this headline">¶</a></h2>
+<p>Executable: <code class="docutils literal notranslate"><span class="pre">ssr-vbap</span></code></p>
+<p>The Vector Base Amplitude Panning (VBAP) renderer uses the algorithm
+described in <a class="reference internal" href="#pulkki1997" id="id14"><span>[Pulkki1997]</span></a>. It tries to find a loudspeaker pair between which
+the phantom source is located (in VBAP you speak of a phantom source rather
+than a virtual one). If it does find a loudspeaker pair whose angle is
+smaller than <span class="math notranslate nohighlight">\(180^\circ\)</span> then it calculates the weights
+<span class="math notranslate nohighlight">\(g_l\)</span> and <span class="math notranslate nohighlight">\(g_r\)</span> for the left and right loudspeaker as</p>
+<div class="math notranslate nohighlight">
+\[g_{l,r} = \frac{\cos\phi \sin \phi_0 \pm \sin \phi \cos \phi_0}
+{2\cos \phi_0 \sin \phi_0}.\]</div>
+<p><span class="math notranslate nohighlight">\(\phi_0\)</span> is half the angle between the two loudspeakers with
+respect to the listening position, <span class="math notranslate nohighlight">\(\phi\)</span> is the angle between the
+position of the phantom source and the direction “between the
+loudspeakers”.</p>
+<p>If the VBAP renderer can not find a loudspeaker pair whose angle is
+smaller than <span class="math notranslate nohighlight">\(180^\circ\)</span> then it uses the closest loudspeaker
+provided that the latter is situated within <span class="math notranslate nohighlight">\(30^\circ\)</span>. If not,
+then it does not render the source. If you are in verbosity level 2
+(i.e. start the SSR with the <code class="docutils literal notranslate"><span class="pre">-vv</span></code> option) you’ll see a notification
+about what’s happening.</p>
+<p>Note that all virtual source types (i.e. point and plane sources) are
+rendered as phantom sources.</p>
+<p>Contrary to WFS, non-uniform distributions of loudspeakers are ok here.
+Ideally, the loudspeakers should be placed on a circle around the
+reference position. You can optionally specify a delay for each
+loudspeakers in order to compensate some amount of misplacement. In the
+ASDF (refer to Section <a class="reference internal" href="general.html#asdf"><span class="std std-ref">ASDF</span></a>), each loudspeaker has the optional
+attribute <code class="docutils literal notranslate"><span class="pre">delay</span></code> which determines the delay in seconds to be applied
+to the respective loudspeaker. Note that the specified delay will be
+rounded to an integer factor of the temporal sampling period. With 44.1
+kHz sampling frequency this corresponds to an accuracy of 22.676
+<span class="math notranslate nohighlight">\(\mu\)</span>s, respectively an accuracy of 7.78 mm in terms of
+loudspeaker placement. Additionally, you can specify a weight for each
+loudspeaker in order to compensate for irregular setups. In the ASDF
+format (refer to Section <a class="reference internal" href="general.html#asdf"><span class="std std-ref">ASDF</span></a>), each loudspeaker has the optional
+attribute <code class="docutils literal notranslate"><span class="pre">weight</span></code> which determines the linear (!) weight to be
+applied to the respective loudspeaker. An example would be</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>&lt;loudspeaker <span class="nv">delay</span><span class="o">=</span><span class="s2">&quot;0.005&quot;</span> <span class="nv">weight</span><span class="o">=</span><span class="s2">&quot;1.1&quot;</span>&gt;
+        &lt;position <span class="nv">x</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span> <span class="nv">y</span><span class="o">=</span><span class="s2">&quot;-2.0&quot;</span>/&gt;
+        &lt;orientation <span class="nv">azimuth</span><span class="o">=</span><span class="s2">&quot;-30&quot;</span>/&gt;
+&lt;/loudspeaker&gt;
+</pre></div>
+</div>
+<p>Delay defaults to 0 if not specified, weight defaults to 1.</p>
+<p>Although principally suitable, we do not recommend to use our amplitude
+panning algorithm for dedicated 5.1 (or comparable) mixdowns. Our VBAP
+renderer only uses adjacent loudspeaker pairs for panning which does not
+exploit all potentials of such a loudspeaker setup. For the mentioned
+formats specialized panning processes have been developed also employing
+non-adjacent loudspeaker pairs if desired.</p>
+<p>The VBAP renderer is rather meant to be used with non-standardized
+setups.</p>
+<dl class="citation">
+<dt class="label" id="pulkki1997"><span class="brackets"><a class="fn-backref" href="#id14">Pulkki1997</a></span></dt>
+<dd><p>Ville Pulkki. Virtual sound source positioning using Vector
+Base Amplitude Panning. In Journal of the Audio Engineering Society (JAES),
+Vol.45(6), June 1997.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="wave-field-synthesis-renderer">
+<span id="wfs"></span><h2>Wave Field Synthesis Renderer<a class="headerlink" href="#wave-field-synthesis-renderer" title="Permalink to this headline">¶</a></h2>
+<p>Executable: <code class="docutils literal notranslate"><span class="pre">ssr-wfs</span></code></p>
+<p>The Wave Field Synthesis (WFS) renderer is the only renderer so far
+that discriminates between virtual point sources and plane waves. It
+implements the simple (far-field) driving function given in <a class="reference internal" href="#spors2008" id="id15"><span>[Spors2008]</span></a>. Note
+that we have only
+implemented a temporary solution to reduce artifacts when virtual sound
+sources are moved. This topic is subject to ongoing research. We will
+work on that in the future. In the SSR configuration file
+(Section <a class="reference internal" href="operation.html#ssr-configuration-file"><span class="std std-ref">Configuration File</span></a>) you can
+specify an overall predelay (this is necessary to render focused
+sources) and the overall length of the involved delay lines. Both values
+are given in samples.</p>
+<dl class="citation">
+<dt class="label" id="spors2008"><span class="brackets">Spors2008</span><span class="fn-backref">(<a href="#id15">1</a>,<a href="#id17">2</a>)</span></dt>
+<dd><p>Sascha Spors, Rudolf Rabenstein, and Jens Ahrens. The theory of
+Wave Field Synthesis revisited. In 124th Convention of the AES, Amsterdam,
+The Netherlands, May 17–20, 2008.</p>
+</dd>
+</dl>
+<div class="section" id="prefiltering">
+<h3>Prefiltering<a class="headerlink" href="#prefiltering" title="Permalink to this headline">¶</a></h3>
+<p>As you might know, WFS requires a spectral correction additionally to
+the delay and weighting of the input signal. Since this spectral
+correction is equal for all loudspeakers, it needs to be performed only
+once on the input. We are working on an automatic generation of the
+required filter. Until then, we load the impulse response of the desired
+filter from a .wav-file which is specified via the <code class="docutils literal notranslate"><span class="pre">--prefilter=FILE</span></code>
+command line option (see Section <a class="reference internal" href="operation.html#running-ssr"><span class="std std-ref">Running SSR</span></a>) or in the
+SSR configuration file
+(Section <a class="reference internal" href="operation.html#ssr-configuration-file"><span class="std std-ref">Configuration File</span></a>). Make sure
+that the specified audio file contains only one channel. Files with a
+differing number of channels will not be loaded. Of course, the sampling
+rate of the file also has to match that of the JACK server.</p>
+<p>Note that the filter will be zero-padded to the next highest power of 2.
+If the resulting filter is then shorter than the current JACK frame
+size, each incoming audio frame will be divided into subframes for
+prefiltering. That means, if you load a filter of 100 taps and JACK
+frame size is 1024, the filter will be padded to 128 taps and
+prefiltering will be done in 8 cycles. This is done in order to save
+processing power since typical prefilters are much shorter than typical
+JACK frame sizes. Zero-padding the prefilter to the JACK frame size
+usually produces large overhead. If the prefilter is longer than the
+JACK frame buffer size, the filter will be divided into partitions whose
+length is equal to the JACK frame buffer size.</p>
+<p>If you do not specify a filter, then no prefiltering is performed. This
+results in a boost of bass frequencies in the reproduced sound field.</p>
+<p>In order to assist you in the design of an appropriate prefilter, we
+have included the MATLAB script
+<code class="docutils literal notranslate"><span class="pre">data/matlab_scripts/make_wfs_prefilter.m</span></code> which does the job. In the
+very top of the file, you can specify the sampling frequency, the
+desired length of the filter as well as the lower and upper frequency
+limits of the spectral correction. The lower limit should be chosen such
+that the subwoofer of your system receives a signal which is not
+spectrally altered. This is due to the fact that only loudspeakers which
+are part of an array of loudspeakers need to be corrected. The lower
+limit is typically around 100 Hz. The upper limit is given by the
+spatial aliasing frequency. The spatial aliasing is dependent on the
+mutual distance of the loudspeakers, the distance of the considered
+listening position to the loudspeakers, and the array geometry. See <a class="reference internal" href="#spors2006" id="id16"><span>[Spors2006]</span></a> for
+detailed information on how to determine the spatial aliasing frequency
+of a given loudspeaker setup. The spatial aliasing frequency is
+typically between 1000 Hz and 2000 Hz. For a theoretical treatment of
+WFS in general and also the prefiltering, see <a class="reference internal" href="#spors2008" id="id17"><span>[Spors2008]</span></a>.</p>
+<p>The script <code class="docutils literal notranslate"><span class="pre">make_wfs_prefilter.m</span></code> will save the impulse response of
+the designed filter in a file like <code class="docutils literal notranslate"><span class="pre">wfs_prefilter_120_1500_44100.wav</span></code>.
+From the file name you can extract that the spectral correction starts
+at 120 Hz and goes up to 1500 Hz at a sampling frequency of 44100 Hz.
+Check the folder <code class="docutils literal notranslate"><span class="pre">data/impules_responses/wfs_prefilters</span></code> for a small
+selection of prefilters.</p>
+<dl class="citation">
+<dt class="label" id="spors2006"><span class="brackets"><a class="fn-backref" href="#id16">Spors2006</a></span></dt>
+<dd><p>Sascha Spors and Rudolf Rabenstein. Spatial aliasing artifacts
+produced by linear and circular loudspeaker arrays used for Wave
+Field Synthesis. In 120th Convention of the AES, Paris, France,
+May 20–23, 2006.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="tapering">
+<h3>Tapering<a class="headerlink" href="#tapering" title="Permalink to this headline">¶</a></h3>
+<p>When the listening area is not enclosed by the loudspeaker setup,
+artifacts arise in the reproduced sound field due to the limited
+aperture. This problem of spatial truncation can be reduced by so-called
+tapering. Tapering is essentially an attenuation of the loudspeakers
+towards the ends of the setup. As a consequence, the boundaries of the
+aperture become smoother which reduces the artifacts. Of course, no
+benefit comes without a cost. In this case the cost is amplitude errors
+for which the human ear fortunately does not seem to be too sensitive.</p>
+<p>In order to taper, you can assign the optional attribute <code class="docutils literal notranslate"><span class="pre">weight</span></code> to
+each loudspeaker in ASDF format (refer to Section [sec:asdf]). The
+<code class="docutils literal notranslate"><span class="pre">weight</span></code> determines the linear (!) weight to be applied to the
+respective loudspeaker. It defaults to 1 if it is not specified.</p>
+</div>
+</div>
+<div class="section" id="ambisonics-amplitude-panning-renderer">
+<span id="aap"></span><h2>Ambisonics Amplitude Panning Renderer<a class="headerlink" href="#ambisonics-amplitude-panning-renderer" title="Permalink to this headline">¶</a></h2>
+<p>Executable: <code class="docutils literal notranslate"><span class="pre">ssr-aap</span></code></p>
+<p>The Ambisonics Amplitude Panning (AAP) renderer does very simple
+Ambisonics rendering. It does amplitude panning by simultaneously using
+all loudspeakers that are not subwoofers to reproduce a virtual source
+(contrary to the VBAP renderer which uses only two loudspeakers at a
+time). Note that the loudspeakers should ideally be arranged on a circle
+and the reference should be the center of the circle. The renderer
+checks for that and applies delays and amplitude corrections to all
+loudspeakers that are closer to the reference than the farthest. This
+also includes subwoofers. If you do not want close loudspeakers to be
+delayed, then simply specify their location in the same direction like
+its actual position but at a larger distance from the reference. Then
+the graphical illustration will not be perfectly aligned with the real
+setup, but the audio processing will take place as intended. Note that
+the AAP renderer ignores delays assigned to an individual loudspeaker in
+ASDF. On the other hand, it does consider weights assigned to the
+loudspeakers. This allows you to compensate for irregular loudspeaker
+placement.</p>
+<p>Note finally that AAP does not allow to encode the distance of a virtual
+sound source since it is a simple panning renderer. All sources will
+appear at the distance of the loudspeakers.</p>
+<p>If you do not explicitly specify an Ambisonics order, then the maximum
+order which makes sense on the given loudspeaker setup will be used. The
+automatically chosen order will be one of <span class="math notranslate nohighlight">\((L-1)/2\)</span> for an odd number
+<span class="math notranslate nohighlight">\(L\)</span> of loudspeakers and accordingly for even numbers.</p>
+<p>You can manually set the order via a command line option
+(Section <a class="reference internal" href="operation.html#running-ssr"><span class="std std-ref">Running SSR</span></a>) or the SSR configuration file
+(Section <a class="reference internal" href="operation.html#ssr-configuration-file"><span class="std std-ref">Configuration File</span></a>). We therefore
+do not explicitly discriminate between “higher order” and “lower order”
+Ambisonics since this is not a fundamental property. And where does
+“lower order” end and “higher order” start anyway?</p>
+<p>Note that the graphical user interface will not indicate the activity of
+the loudspeakers since theoretically all loudspeakers contribute to the
+sound field of a virtual source at any time.</p>
+<div class="section" id="conventional-driving-function">
+<h3>Conventional driving function<a class="headerlink" href="#conventional-driving-function" title="Permalink to this headline">¶</a></h3>
+<p>By default we use the standard Ambisonics panning function presented,
+for example, in <a class="reference internal" href="#neukom2007" id="id18"><span>[Neukom2007]</span></a>. It reads</p>
+<div class="math notranslate nohighlight">
+\[d(\alpha_0)  = \frac{\sin\left ( \frac{2M+1}{2} \ (\alpha_0 -
+\alpha_\textrm{s})\right )} {(2M+1) \ \sin \left ( \frac{\alpha_0 -
+\alpha_\textrm{s}}{2} \right ) },\]</div>
+<p>whereby <span class="math notranslate nohighlight">\(\alpha_0\)</span> is the azimuth angle of the position of the
+considered secondary source, <span class="math notranslate nohighlight">\(\alpha_\textrm{s}\)</span> is the azimuth
+angle of the position of the virtual source, both in radians, and <span class="math notranslate nohighlight">\(M\)</span> is
+the Ambisonics order.</p>
+</div>
+<div class="section" id="in-phase-driving-function">
+<h3>In-phase driving function<a class="headerlink" href="#in-phase-driving-function" title="Permalink to this headline">¶</a></h3>
+<p>The conventional driving function leads to both positive and negative
+weights for individual loudspeakers. An object (e.g. a listener)
+introduced into the listening area can lead to an imperfect interference
+of the wave fields of the individual loudspeakers and therefore to an
+inconsistent perception. Furthermore, conventional Ambisonics panning
+can lead to audible artifacts for fast source motions since it can
+happen that the weights of two adjacent audio frames have a different
+algebraic sign.</p>
+<p>These problems can be worked around when only positive weights are
+applied on the input signal (<em>in-phase</em> rendering). This can be
+accomplished via the in-phase driving function given e.g. in <a class="reference internal" href="#neukom2007" id="id19"><span>[Neukom2007]</span></a>
+reading</p>
+<div class="math notranslate nohighlight">
+\[d(\alpha_0) = \cos^{2M} \left (\frac{\alpha_0 - \alpha_\textrm{s}}{2}
+\right ) \ . \nonumber\]</div>
+<p>Note that in-phase rendering leads to a less precise localization of the
+virtual source and other unwanted perceptions. You can enable in-phase
+rendering via the according command-line option or you can set the
+<code class="docutils literal notranslate"><span class="pre">IN_PHASE_RENDERING</span></code> property in the SSR configuration file (see
+section <a class="reference internal" href="operation.html#ssr-configuration-file"><span class="std std-ref">Configuration File</span></a>) to be
+<code class="docutils literal notranslate"><span class="pre">TRUE</span></code> or <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<dl class="citation">
+<dt class="label" id="neukom2007"><span class="brackets">Neukom2007</span><span class="fn-backref">(<a href="#id18">1</a>,<a href="#id19">2</a>)</span></dt>
+<dd><p>Martin Neukom. Ambisonic panning. In 123th Convention of the
+AES, New York, NY, USA, Oct. 5–8, 2007.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="distance-coded-ambisonics-renderer">
+<span id="dca"></span><h2>Distance-coded Ambisonics Renderer<a class="headerlink" href="#distance-coded-ambisonics-renderer" title="Permalink to this headline">¶</a></h2>
+<p>Executable: <code class="docutils literal notranslate"><span class="pre">ssr-dca</span></code></p>
+<p>Distance-coded Ambisonics (DCA) is sometimes also termed “Nearfield Compensated Higher-Order Ambisonics”. This renderer implements the driving functions from <a class="reference internal" href="#spors2011" id="id20"><span>[Spors2011]</span></a>. The difference to the AAP renderer is a long story, which we will elaborate on at a later point.</p>
+<p>Note that the DCA renderer is experimental at this stage. It currently supports orders of up to 28. There are some complications regarding how the user specifies the locations of the loudspeakers and how the renderer handles them. The rendered scene might appear mirrored or rotated. If you are experiencing this, you might want to play around with the assignment of the outputs and the loudspeakers to fix it temporarily. Or contact us.</p>
+<p>Please bear with us. We are going to take care of this soon.</p>
+<dl class="citation">
+<dt class="label" id="spors2011"><span class="brackets"><a class="fn-backref" href="#id20">Spors2011</a></span></dt>
+<dd><ol class="upperalpha simple" start="19">
+<li><p>Spors, V. Kuscher, and J. Ahrens. Efficient Realization of Model-Based Rendering for 2.5-dimensional Near-Field Compensated Higher Order Ambisonics. In IEEE WASPAA, New Paltz, NY, USA, 2011.</p></li>
+</ol>
+</dd>
+</dl>
+</div>
+<div class="section" id="generic-renderer">
+<span id="genren"></span><h2>Generic Renderer<a class="headerlink" href="#generic-renderer" title="Permalink to this headline">¶</a></h2>
+<p>Executable: <code class="docutils literal notranslate"><span class="pre">ssr-generic</span></code></p>
+<p>The generic renderer turns the SSR into a multiple-input-multiple-output
+convolution engine. You have to use an ASDF file in which the attribute
+<code class="docutils literal notranslate"><span class="pre">properties_file</span></code> of the individual sound source has to be set
+properly. That means that the indicated file has to be a multichannel
+file with the same number of channels like loudspeakers in the setup.
+The impulse response in the file at channel 1 represents the driving
+function for loudspeaker 1 and so on.</p>
+<p>Be sure that you load a reproduction setup with the corresponding number
+of loudspeakers.</p>
+<p>It is obviously not possible to move virtual sound sources since the
+loaded impulse responses are static. We use this renderer in order to
+test advanced methods before implementing them in real-time or to
+compare two different rendering methods by having one sound source in
+one method and another sound source in the other method.</p>
+<p>Download the ASDF examples from <a class="reference external" href="http://spatialaudio.net/ssr/">http://spatialaudio.net/ssr/</a> and check out the
+file <code class="docutils literal notranslate"><span class="pre">generic_renderer_example.asd</span></code> which comes with all required data.</p>
+<table class="docutils align-default" id="loudspeaker-properties">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 40%" />
+<col style="width: 15%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td></td>
+<td><p>individual delay</p></td>
+<td><p>weight</p></td>
+</tr>
+<tr class="row-even"><td><p>binaural renderer</p></td>
+<td><p><em>-</em></p></td>
+<td><p><em>-</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>BRS renderer</p></td>
+<td><p><em>-</em></p></td>
+<td><p><em>-</em></p></td>
+</tr>
+<tr class="row-even"><td><p>VBAP renderer</p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>WFS renderer</p></td>
+<td><p><em>-</em></p></td>
+<td><p><em>+</em></p></td>
+</tr>
+<tr class="row-even"><td><p>AAP renderer</p></td>
+<td><p>autom.</p></td>
+<td><p><em>+</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>generic renderer</p></td>
+<td><p><em>-</em></p></td>
+<td><p><em>-</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>Table 1: Loudspeaker properties considered by the different renderers.</p>
+<table class="docutils align-default" id="source-props">
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 7%" />
+<col style="width: 6%" />
+<col style="width: 9%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+<col style="width: 19%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td></td>
+<td><p>gain</p></td>
+<td><p>mute</p></td>
+<td><p>position</p></td>
+<td><p>orientation <a class="footnote-reference brackets" href="#id22" id="id21">2</a></p></td>
+<td><p>distance attenuation</p></td>
+<td><p>model</p></td>
+</tr>
+<tr class="row-even"><td><p>binaural renderer</p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p>only w.r.t. ampl.</p></td>
+</tr>
+<tr class="row-odd"><td><p>BRS renderer</p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>-</em></p></td>
+<td><p><em>-</em></p></td>
+<td><p><em>-</em></p></td>
+<td><p><em>-</em></p></td>
+</tr>
+<tr class="row-even"><td><p>VBAP renderer</p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p>only w.r.t. ampl.</p></td>
+</tr>
+<tr class="row-odd"><td><p>WFS renderer</p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+</tr>
+<tr class="row-even"><td><p>AAP renderer</p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>-</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p>only w.r.t. ampl.</p></td>
+</tr>
+<tr class="row-odd"><td><p>generic renderer</p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>+</em></p></td>
+<td><p><em>-</em></p></td>
+<td><p><em>-</em></p></td>
+<td><p><em>-</em></p></td>
+<td><p><em>-</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>Table 2: Virtual source’s properties considered by the different renderers.</p>
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Tables <a class="reference internal" href="#loudspeaker-properties"><span class="std std-ref">1</span></a> and <a class="reference internal" href="#source-props"><span class="std std-ref">2</span></a> summarize
+the functionality of the
+SSR renderers.</p>
+<dl class="footnote brackets">
+<dt class="label" id="id22"><span class="brackets"><a class="fn-backref" href="#id21">2</a></span></dt>
+<dd><p>So far, only planar sources have a defined orientation. By default, their
+orientation is always pointing from their nominal position to the reference
+point no matter where you move them. Any other information or updates on the
+orientation are ignored. You can changes this behavior by using either the
+command line option <code class="docutils literal notranslate"><span class="pre">--no-auto-rotation</span></code>, using the <code class="docutils literal notranslate"><span class="pre">AUTO_ROTATION</span></code>
+configuration parameter, or hitting <code class="docutils literal notranslate"><span class="pre">r</span></code> in the GUI.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="gui.html" class="btn btn-neutral float-right" title="Graphical User Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="operation.html" class="btn btn-neutral float-left" title="Compiling and Running the SSR" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, SSR Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

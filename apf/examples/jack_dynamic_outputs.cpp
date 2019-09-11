@@ -2,6 +2,7 @@
 // This is a stand-alone program.
 
 #include <vector>
+#include <unistd.h>
 
 #include "apf/mimoprocessor.h"
 #include "apf/combine_channels.h"  // for apf::CombineChannelsCopy

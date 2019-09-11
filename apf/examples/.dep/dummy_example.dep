@@ -1,0 +1,5 @@
+dummy_example .dep/dummy_example.dep: dummy_example.cpp \
+ ../apf/mimoprocessor.h ../apf/rtlist.h ../apf/commandqueue.h \
+ ../apf/lockfreefifo.h ../apf/math.h ../apf/misc.h ../apf/container.h \
+ ../apf/iterator.h ../apf/parameter_map.h ../apf/stringtools.h \
+ ../apf/pointer_policy.h ../apf/dummy_thread_policy.h

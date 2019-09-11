@@ -8,3 +8,17 @@ data/Makefile.in
 man/Makefile.in
 src/Makefile.in
 src/config.h.in
+apf/examples/audiofile_simpleprocessor
+apf/examples/dummy_example
+apf/examples/jack_change_volume
+apf/examples/jack_connections
+apf/examples/jack_convolver
+apf/examples/jack_dynamic_inputs
+apf/examples/jack_dynamic_outputs
+apf/examples/jack_matrix
+apf/examples/jack_simpleprocessor
+apf/examples/portaudio_simpleprocessor
+apf/examples/jack_query_thread
+apf/examples/jack_minimal
+.vscode
+doc

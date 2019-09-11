@@ -1,6 +1,7 @@
 // Usage example for the MimoProcessor with JACK.
 
 #include <iostream>
+#include <unistd.h>
 
 #include "apf/stringtools.h"
 

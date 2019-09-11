@@ -1,6 +1,7 @@
 // Example that shows how to get information out of the realtime thread(s).
 
 #include <iostream>
+#include <unistd.h>
 
 #include "apf/mimoprocessor.h"
 #include "apf/jack_policy.h"
@@ -14,6 +15,8 @@ class MyProcessor : public apf::MimoProcessor<MyProcessor
     MyProcessor()
       : MimoProcessorBase()
       , ch(_fifo, '_')
+      , _query(*this)
+      , _query_thread(QueryThread(_query_fifo,1), 1000*1000 / this->block_size())
     {}
 
     // MyProcessor doesn't process anything, no Process struct needed

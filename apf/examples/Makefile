@@ -1,5 +1,6 @@
 JACK_STUFF += jack_simpleprocessor jack_dynamic_inputs jack_dynamic_outputs
-JACK_STUFF += jack_minimal jack_matrix jack_query_thread
+JACK_STUFF += jack_minimal jack_matrix
+# JACK_STUFF += jack_query_thread
 JACK_STUFF += jack_convolver
 JACK_STUFF += jack_change_volume
 JACK_STUFF += jack_connections

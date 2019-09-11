@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cassert>  // for assert()
 
+#include <unistd.h>
+
 #include "apf/mimoprocessor.h"
 #include "apf/jack_policy.h"
 #include "apf/container.h"  // for fixed_matrix

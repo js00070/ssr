@@ -1,6 +1,8 @@
 // A small example of the MimoProcessor with varying JACK input ports.
 // This is a stand-alone program.
 
+#include <unistd.h>
+
 #include "apf/mimoprocessor.h"
 #include "apf/combine_channels.h"  // for apf::CombineChannels
 #include "apf/jack_policy.h"

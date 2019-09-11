@@ -1,0 +1,1524 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Compiling and Running the SSR &mdash; SoundScape Renderer 0.5.0-54-g00816ea documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The Renderers" href="renderers.html" />
+    <link rel="prev" title="General" href="general.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> SoundScape Renderer
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="general.html">General</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="general.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#audio-scenes">Audio Scenes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="general.html#format">Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="general.html#coordinate-system">Coordinate System</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#audio-scene-description-format-asdf">Audio Scene Description Format (ASDF)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="general.html#syntax">Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="general.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#ip-interface">IP Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#bug-reports-feature-requests-and-comments">Bug Reports, Feature Requests and Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#contributors">Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#your-own-contributions">Your Own Contributions</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Compiling and Running the SSR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#choosing-the-operating-system">Choosing the Operating System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-debian-package">The Debian Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-the-source">Getting the Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuring-and-compiling">Configuring and Compiling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hints-on-configuration">Hints on Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#installing">Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#uninstalling">Uninstalling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compiling-and-installing-from-the-git-repository">Compiling and Installing from the Git Repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-ssr">Running the SSR</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#keyboard-actions-in-non-gui-mode">Keyboard actions in non-GUI mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recording-the-ssr-output">Recording the SSR output</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-files">Configuration Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#head-tracking">Head Tracking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-intersense-inertiacube3">Preparing InterSense InertiaCube3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-polhemus-fastrak-patriot">Preparing Polhemus Fastrak/Patriot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-vrpn">Preparing VRPN</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-ssr-with-different-audio-clients">Using the SSR with different audio clients</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vlc-media-player">VLC Media Player</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#itunes">iTunes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mplayer">mPlayer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#mac-os-x">Mac OS X</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jack-on-mac-os-x">JACK on Mac OS X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#application-bundle">Application Bundle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-from-source">Building from Source</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#what-to-install-first">What to install first?</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#using-the-gui">Using the GUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-via-the-command-line-terminal">Running via the Command Line (Terminal)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-a-head-tracker">Using a Head-Tracker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#running-with-intersense-tracker-support">Running with InterSense tracker support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#running-with-razor-ahrs-tracker-support">Running with Razor AHRS tracker support</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ms-windows">MS Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-ssr-with-daws">Using the SSR with DAWs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#known-issues-linux-mac-os-x">Known Issues (Linux &amp; Mac OS X)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#make-dmg-on-mac-os-x-chokes-on-symbolic-links"><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">dmg</span></code> on Mac OS X chokes on symbolic links</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ssr-crashes-with-a-segmentation-fault-on-max-os-x">SSR crashes with a segmentation fault on Max OS X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#a-file-that-can-t-be-loaded-results-in-a-connection-to-a-live-input">A file that can’t be loaded results in a connection to a live input</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conflicting-jack-and-ecasound-versions">Conflicting JACK and Ecasound versions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#annoying-ecasound-message">Annoying Ecasound message</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ecasound-cannot-open-a-jack-port">Ecasound cannot open a JACK port</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-ssr-on-mac-os-x-el-capitan">Using SSR on Mac OS X El Capitan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#long-paths-to-audio-files-on-mac-os-x">Long paths to audio files on Mac OS X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#segmentation-fault-when-opening-a-scene">Segmentation Fault when Opening a Scene</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choppy-sound-on-cheap-on-board-sound-cards">Choppy Sound on Cheap (On-Board) Sound Cards</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dylibbundler-doesn-t-grok-qt-frameworks"><code class="docutils literal notranslate"><span class="pre">dylibbundler</span></code> doesn’t grok Qt Frameworks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ssr-for-mac-os-x-qt-menu-nib-not-found">SSR for Mac OS X: qt_menu.nib not found</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compilation-error-on-ubuntu-and-archlinux">Compilation Error on Ubuntu and Archlinux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polhemus-tracker-does-not-work-with-ssr">Polhemus tracker does not work with SSR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#missing-gui-buttons-and-timeline">Missing GUI Buttons and Timeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#opengl-linker-error">OpenGL Linker Error</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ip-interface-isn-t-selected-although-boost-libraries-are-installed">IP interface isn’t selected although boost libraries are installed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#second-instance-of-ssr-crashes">Second instance of SSR crashes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#audio-files-with-spaces">Audio files with spaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#error-valueerror-unknown-locale-utf-8-when-building-the-manual">Error <code class="docutils literal notranslate"><span class="pre">ValueError:</span> <span class="pre">unknown</span> <span class="pre">locale:</span> <span class="pre">UTF-8</span></code> when building the manual</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="renderers.html">The Renderers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="renderers.html#general">General</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="renderers.html#reproduction-setups">Reproduction Setups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="renderers.html#a-note-on-the-timing-of-the-audio-signals">A Note on the Timing of the Audio Signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="renderers.html#subwoofers">Subwoofers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="renderers.html#distance-attenuation">Distance Attenuation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="renderers.html#doppler-effect">Doppler Effect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="renderers.html#signal-processing">Signal Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="renderers.html#binaural-renderer">Binaural Renderer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="renderers.html#the-hrir-sets-shipped-with-ssr">The HRIR sets shipped with SSR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="renderers.html#preparing-hrir-sets">Preparing HRIR sets</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="renderers.html#binaural-room-synthesis-renderer">Binaural Room Synthesis Renderer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="renderers.html#vector-base-amplitude-panning-renderer">Vector Base Amplitude Panning Renderer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="renderers.html#wave-field-synthesis-renderer">Wave Field Synthesis Renderer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="renderers.html#prefiltering">Prefiltering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="renderers.html#tapering">Tapering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="renderers.html#ambisonics-amplitude-panning-renderer">Ambisonics Amplitude Panning Renderer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="renderers.html#conventional-driving-function">Conventional driving function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="renderers.html#in-phase-driving-function">In-phase driving function</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="renderers.html#distance-coded-ambisonics-renderer">Distance-coded Ambisonics Renderer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="renderers.html#generic-renderer">Generic Renderer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="renderers.html#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gui.html">Graphical User Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gui.html#general-layout">General Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gui.html#mouse-actions">Mouse Actions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gui.html#source-properties-dialog">Source Properties Dialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gui.html#drag-drop-of-scenes">Drag &amp; Drop of Scenes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gui.html#keyboard-actions">Keyboard Actions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="network.html#scene">Scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network.html#state">State</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network.html#source">Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network.html#reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SoundScape Renderer</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Compiling and Running the SSR</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/operation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="compiling-and-running-the-ssr">
+<h1>Compiling and Running the SSR<a class="headerlink" href="#compiling-and-running-the-ssr" title="Permalink to this headline">¶</a></h1>
+<p>The following sections describe how to build and/or install the SSR on your
+computer. The SSR can be used on GNU/Linux and Mac OS X. The MS Windows version of SSR is experimental at this stage.</p>
+<div class="section" id="choosing-the-operating-system">
+<h2>Choosing the Operating System<a class="headerlink" href="#choosing-the-operating-system" title="Permalink to this headline">¶</a></h2>
+<p>Well, first you’ll need a proper operating system.
+We recommend Debian GNU/Linux (<a class="reference external" href="http://www.debian.org/">http://www.debian.org/</a>) or something Debian-based
+like Ubuntu (<a class="reference external" href="http://www.ubuntu.com/">http://www.ubuntu.com/</a>).
+The SSR should work on most modern Linux-distributions, though.
+You can also try Arch Linux (<a class="reference external" href="https://www.archlinux.org/">https://www.archlinux.org/</a>), if you want.
+If you are reluctant to install a new operating system on your computer, you can
+also install any of the above-mentioned operating systems virtually, for example
+using <a class="reference external" href="https://www.virtualbox.org/">https://www.virtualbox.org/</a>.</p>
+<p>If you happen to have Mac OS X installed on your computer, that’s OK, too.</p>
+</div>
+<div class="section" id="the-debian-package">
+<span id="debian-package"></span><h2>The Debian Package<a class="headerlink" href="#the-debian-package" title="Permalink to this headline">¶</a></h2>
+<p>Thanks to IOhannes m zmoelnig, the SSR is available as a Debian package!</p>
+<p><a class="reference external" href="http://packages.debian.org/soundscaperenderer">http://packages.debian.org/soundscaperenderer</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Debian distribution comes in several flavors, such as <a class="reference external" href="http://www.debian.org/releases/stable/">stable</a>, <a class="reference external" href="http://www.debian.org/releases/testing/">testing</a>
+and <a class="reference external" href="http://www.debian.org/releases/sid/">sid</a> (meaning “still in development”).
+At the time of writing, the <em>soundscaperenderer</em> package is part of “testing”,
+so if you have Debian “stable” installed, you will have to add the package
+sources for “testing” (you can try the <a class="reference external" href="https://debgen.simplylinux.ch/">Debian Sources List Generator</a>).
+If it still doesn’t work, you should consider upgrading your whole system to
+“testing” or, if that’s not feasible, you can still compile and install the
+SSR from its source (see below for instructions).</p>
+</div>
+<p>You can install the <em>soundscaperenderer</em> package using your favorite package
+manager (<em>apt-get</em>, <em>aptitude</em>, <em>synaptic</em>, …), all dependencies should be
+installed automatically.</p>
+<p>The package may or may not work on other Debian-based distributions like Ubuntu.
+Feel free to try it and report back to us.</p>
+<p>Once the SSR is installed, move on to the section <a class="reference internal" href="#running-ssr"><span class="std std-ref">Running the SSR</span></a>.</p>
+</div>
+<div class="section" id="getting-the-source">
+<h2>Getting the Source<a class="headerlink" href="#getting-the-source" title="Permalink to this headline">¶</a></h2>
+<p>If you didn’t receive this manual with the source code of the SSR, you
+have to download it from the SSR website <a class="reference external" href="http://spatialaudio.net/ssr">http://spatialaudio.net/ssr</a> or from
+the git repository. Refer to Section <a class="reference internal" href="#compiling-from-git"><span class="std std-ref">Compiling and Installing from the
+Git Repository</span></a> in the latter case. Otherwise, continue
+reading this section.</p>
+<p>Once you downloaded the tarball (the file that ends in <code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code>), unpack it
+and change to the newly created directory:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>tar xvzf ssr-x.y.z.tar.gz
+<span class="nb">cd</span> ssr-x.y.z/
+</pre></div>
+</div>
+<p>Of course, <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code> and <code class="docutils literal notranslate"><span class="pre">z</span></code> should have been replaced by the actual
+version number. If you are new to Unix-like operating systems, you should try
+<em>shell completion</em>: just start typing the beginning of the command (e.g. <code class="docutils literal notranslate"><span class="pre">tar</span>
+<span class="pre">xvzf</span> <span class="pre">ssr</span></code>) and hit the Tab-key. Wow, the whole file name gets completed!</p>
+</div>
+<div class="section" id="configuring-and-compiling">
+<span id="configuring"></span><h2>Configuring and Compiling<a class="headerlink" href="#configuring-and-compiling" title="Permalink to this headline">¶</a></h2>
+<p>To build the SSR from source you have to configure first. Open a shell
+and <code class="docutils literal notranslate"><span class="pre">cd</span></code> to the directory containing the source code of the package
+and type:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure
+</pre></div>
+</div>
+<p>This script will check your system for dependencies and prepare the
+<code class="docutils literal notranslate"><span class="pre">Makefile</span></code> required for compilation. Section
+<a class="reference internal" href="#dependencies"><span class="std std-ref">Dependencies</span></a> lists
+the dependencies that must be installed on your system. The
+<code class="docutils literal notranslate"><span class="pre">configure</span></code> script will signal if dependencies are missing. At
+successful termination of the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script a summary will show
+up and you are ready to compile. If dependencies for certain modules of SSR
+are missing that you are not going to use then you can simply disable the
+according module by adding the appropriate argument to the call to the ``
+configure`` script so that you do not need to bother with the dependencies.
+Examples are</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure --disable-ip-interface
+./configure --disable-gui
+</pre></div>
+</div>
+<p>See Section <a class="reference internal" href="#hints-conf"><span class="std std-ref">Hints on Configuration</span></a> for details.</p>
+<p>If everything went smoothly, you can continue with the next step:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<p>This will take some time (maybe a few minutes). If you have a multi-core or
+multi-processor computer you can speed up things by specifying the number of
+processes you want to use with <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-j8</span></code> (or any other number that you
+choose).</p>
+<div class="section" id="dependencies">
+<span id="id1"></span><h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h3>
+<p>The following list is a list of packages which you should install with the
+package manager of your choice (<code class="docutils literal notranslate"><span class="pre">apt-get</span></code>, <code class="docutils literal notranslate"><span class="pre">aptitude</span></code>, <code class="docutils literal notranslate"><span class="pre">synaptic</span></code>, …).
+However, if you prefer, you can of course also download everything as source
+code and compile each program yourself.</p>
+<ul class="simple">
+<li><p><strong>make</strong></p></li>
+<li><p><strong>g++</strong> (at least version 4.7.3) or <strong>clang</strong></p></li>
+<li><p><strong>libasio-dev</strong></p></li>
+<li><p><strong>qtbase5-dev</strong> and <strong>libqt5opengl5-dev</strong> (To build the GUI)</p></li>
+<li><p><strong>libecasoundc2.2-dev</strong> or <strong>libecasoundc-dev</strong></p></li>
+<li><p><strong>ecasound</strong></p></li>
+<li><p><strong>libxml2-dev</strong></p></li>
+<li><p><strong>libfftw3-dev</strong></p></li>
+<li><p><strong>libsndfile1-dev</strong></p></li>
+<li><p><strong>libjack-dev</strong> or <strong>libjack-jackd2-dev</strong></p></li>
+<li><p><strong>jackd</strong> or <strong>jackd1</strong> or <strong>jackd2</strong></p></li>
+<li><p><strong>pkg-config</strong></p></li>
+</ul>
+<p>Extra dependencies for installing from the Git repository:</p>
+<ul class="simple">
+<li><p><strong>libtool</strong></p></li>
+<li><p><strong>automake</strong></p></li>
+</ul>
+<p>Note that there are additional dependencies for some of the tracking systems
+that SSR supports. Refer to Section <a class="reference internal" href="#head-tracking"><span class="std std-ref">Head Tracking</span></a> for
+further information.</p>
+<p>To use a different compiler, you can specify it with <code class="docutils literal notranslate"><span class="pre">CXX</span></code>:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure <span class="nv">CXX</span><span class="o">=</span>clang++
+</pre></div>
+</div>
+</div>
+<div class="section" id="hints-on-configuration">
+<span id="hints-conf"></span><h3>Hints on Configuration<a class="headerlink" href="#hints-on-configuration" title="Permalink to this headline">¶</a></h3>
+<p>If you encounter problems configuring the SSR these hints could help:</p>
+<ul class="simple">
+<li><p>Ensure that you really installed all libraries (<code class="docutils literal notranslate"><span class="pre">lib</span></code>) with
+devel-package (<code class="docutils literal notranslate"><span class="pre">devel</span></code> or <code class="docutils literal notranslate"><span class="pre">dev</span></code>, where available) mentioned in
+Section <a class="reference internal" href="#dependencies"><span class="std std-ref">Dependencies</span></a>.</p></li>
+<li><p>If your QT5 library cannot be found during configuration,
+try running <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">QT_SELECT=qt5</span></code>.
+If there are problems with qt5’s <code class="docutils literal notranslate"><span class="pre">moc</span></code> during the build, you might need to add
+the corresponding folder (like <code class="docutils literal notranslate"><span class="pre">/usr/local/opt/qt/bin</span></code>) to your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p></li>
+<li><p>It may be necessary to run <code class="docutils literal notranslate"><span class="pre">ldconfig</span></code> after installing new
+libraries.</p></li>
+<li><p>Ensure that <code class="docutils literal notranslate"><span class="pre">/etc/ld.so.conf</span></code> or <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> are set
+properly, and run <code class="docutils literal notranslate"><span class="pre">ldconfig</span></code> after changes.</p></li>
+<li><p>If a header is not installed in the standard paths of your system you
+can pass its location to the configure script using
+<code class="docutils literal notranslate"><span class="pre">./configure</span> <span class="pre">CPPFLAGS=-Iyourpath</span></code>.</p></li>
+</ul>
+<p>Note that with <code class="docutils literal notranslate"><span class="pre">./configure</span> <span class="pre">--help</span></code> all configure-options are
+displayed, e.g. in Section “Optional Features” you will find how to
+disable compilation of the head trackers and many other things. Setting
+the influential environment variables with <code class="docutils literal notranslate"><span class="pre">./configure</span> <span class="pre">VARNAME=value</span></code>
+can be useful for debugging dependencies.</p>
+</div>
+</div>
+<div class="section" id="installing">
+<h2>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h2>
+<p>Until now, everything was happening in the source directory (something like ssr
+-x.x.x/). To be really useful, the SSR should be installed on the system with
+the command</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>make install
+</pre></div>
+</div>
+<p>On some systems you need root privileges for this step. However, it’s easier
+if you set up your system to be able to do it as a normal user. On Debian,
+it’s enough to add your username to the <code class="docutils literal notranslate"><span class="pre">staff</span></code> group. Just run this command
+(as root or using <code class="docutils literal notranslate"><span class="pre">sudo</span></code>): <code class="docutils literal notranslate"><span class="pre">adduser</span> <span class="pre">myuser</span> <span class="pre">staff</span></code> (replacing <code class="docutils literal notranslate"><span class="pre">myuser</span></code> by
+your actual user name). On other systems you may try something like this (
+again, as root or using <code class="docutils literal notranslate"><span class="pre">sudo</span></code>): <code class="docutils literal notranslate"><span class="pre">chown</span> <span class="pre">myuser:myuser</span> <span class="pre">/usr/local</span> <span class="pre">-R</span></code> (
+again, replacing <code class="docutils literal notranslate"><span class="pre">myuser</span></code> by your user name).</p>
+</div>
+<div class="section" id="uninstalling">
+<h2>Uninstalling<a class="headerlink" href="#uninstalling" title="Permalink to this headline">¶</a></h2>
+<p>If the SSR didn’t meet your expectations, we are very sorry, and of
+course you can easily remove it from your system with</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>make uninstall
+</pre></div>
+</div>
+</div>
+<div class="section" id="compiling-and-installing-from-the-git-repository">
+<span id="compiling-from-git"></span><h2>Compiling and Installing from the Git Repository<a class="headerlink" href="#compiling-and-installing-from-the-git-repository" title="Permalink to this headline">¶</a></h2>
+<p>In short, in order to install on your machine, open a terminal, create a
+folder that will host the source code, <code class="docutils literal notranslate"><span class="pre">cd</span></code> to that folder, and type</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/SoundScapeRenderer/ssr.git
+</pre></div>
+</div>
+<p>to download the source code. Then execute</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./autogen.sh
+./configure
+make
+make install
+</pre></div>
+</div>
+<p>inside the folder in which SSR resides. You’ll probably have to have root
+privileges for the installation. Of course, all dependencies of the
+compilation process apply. See Section <a class="reference internal" href="#dependencies"><span class="std std-ref">Dependencies</span></a>.</p>
+</div>
+<div class="section" id="running-the-ssr">
+<span id="running-ssr"></span><h2>Running the SSR<a class="headerlink" href="#running-the-ssr" title="Permalink to this headline">¶</a></h2>
+<p>Before you start the SSR, start JACK, e.g. by typing
+<code class="docutils literal notranslate"><span class="pre">jackd</span> <span class="pre">-d</span> <span class="pre">alsa</span> <span class="pre">-r</span> <span class="pre">44100</span></code> in a shell or using the graphical user
+interface “qjackctl”. Now, the easiest way to get a signal out of the
+SSR is by passing a sound-file directly:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ssr YOUR_AUDIO_FILE
+</pre></div>
+</div>
+<p>By default, the SSR starts with the binaural renderer; please use
+headphones for listening with this renderer. Type <code class="docutils literal notranslate"><span class="pre">ssr</span> <span class="pre">--help</span></code> to get
+an overview of the command line options and various renderers:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>USAGE: ssr [OPTIONS] &lt;scene-file&gt;
+
+The SoundScape Renderer (SSR) is a tool for real-time spatial audio
+reproduction providing a variety of rendering algorithms.
+
+OPTIONS:
+
+Choose a rendering algorithm:
+    --binaural         Binaural (using HRIRs)
+    --brs              Binaural Room Synthesis (using BRIRs)
+    --wfs              Wave Field Synthesis
+    --aap              Ambisonics Amplitude Panning
+    --dca              Distance-coded Ambisonics (experimental!)
+    --vbap             Stereophonic (Vector Base Amplitude Panning)
+    --generic          Generic Renderer
+
+Renderer-specific options:
+    --hrirs=FILE       Load the HRIRs for binaural renderer from FILE
+    --hrir-size=VALUE  Maximum IR length (binaural and BRS renderer)
+    --prefilter=FILE   Load WFS prefilter from FILE
+-o, --ambisonics-order=VALUE Ambisonics order to use (default: maximum)
+    --in-phase-rendering     Use in-phase rendering for Ambisonics
+
+JACK options:
+-n, --name=NAME        Set JACK client name to NAME
+    --input-prefix=PREFIX    Input  port prefix (default: &quot;system:capture_&quot;)
+    --output-prefix=PREFIX   Output port prefix (default: &quot;system:playback_&quot;)
+-f, --freewheel        Use JACK in freewheeling mode
+
+General options:
+-c, --config=FILE      Read configuration from FILE
+-s, --setup=FILE       Load reproduction setup from FILE
+    --threads=N        Number of audio threads (default N=1)
+-r, --record=FILE      Record the audio output of the renderer to FILE
+    --loop             Loop all audio files
+    --master-volume-correction=VALUE
+                       Correction of the master volume in dB (default: 0 dB)
+    --auto-rotation    Auto-rotate sound sources&#39; orientation toward the reference
+    --no-auto-rotation Don&#39;t auto-rotate sound sources&#39; orientation toward the reference
+-i, --ip-server[=PORT] Start IP server (default on)
+                       A port can be specified: --ip-server=5555
+-I, --no-ip-server     Don&#39;t start IP server
+    --end-of-message-character=VALUE
+                       ASCII code for character to end messages with
+                       (default 0 = binary zero)
+-g, --gui              Start GUI (default)
+-G, --no-gui           Don&#39;t start GUI
+-t, --tracker=TYPE     Start tracker, possible value(s):
+                       fastrak patriot vrpn razor
+    --tracker-port=PORT
+                       A serial port can be specified, e.g. /dev/ttyS1
+-T, --no-tracker       Don&#39;t start tracker
+
+-h, --help             Show this very help information. You just typed that!
+-v, --verbose          Increase verbosity level (up to -vvv)
+-V, --version          Show version information and exit
+</pre></div>
+</div>
+<p>Choose the appropriate arguments and make sure that your amplifiers are
+not turned too loud…</p>
+<p>To stop the SSR use either the options provided by the GUI (Section
+<a class="reference internal" href="gui.html#gui"><span class="std std-ref">GUI</span></a>) or type <code class="docutils literal notranslate"><span class="pre">Crtl+c</span></code> in the shell in which you started the SSR.</p>
+<div class="section" id="keyboard-actions-in-non-gui-mode">
+<h3>Keyboard actions in non-GUI mode<a class="headerlink" href="#keyboard-actions-in-non-gui-mode" title="Permalink to this headline">¶</a></h3>
+<p>If you start SSR without GUI (option <code class="docutils literal notranslate"><span class="pre">--no-gui</span></code>), it starts
+automatically replaying the scene that you have loaded. You can have some
+interaction via the shell. Currently implemented actions are (all
+followed by <code class="docutils literal notranslate"><span class="pre">Return</span></code>):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code>: calibrate tracker (if available)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code>: start playback</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">q</span></code>: quit application</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r</span></code>: “rewind”; go back to the beginning of the current scene</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code>: stop (pause) playback</p></li>
+</ul>
+<p>Note that in non-GUI mode, audio processing is always taking place. Live
+inputs are processed even if you pause playback.</p>
+</div>
+<div class="section" id="recording-the-ssr-output">
+<h3>Recording the SSR output<a class="headerlink" href="#recording-the-ssr-output" title="Permalink to this headline">¶</a></h3>
+<p>You can record the audio output of the SSR using the
+<code class="docutils literal notranslate"><span class="pre">--record=FILE</span></code> command line option. All output signals
+(i.e. the loudspeaker signals) will be recorded to a multichannel wav-file
+named <code class="docutils literal notranslate"><span class="pre">FILE</span></code>. The order of channels corresponds to the order of loudspeakers
+specifed in the reproduction setup (see Sections
+<a class="reference internal" href="renderers.html#reproduction-setups"><span class="std std-ref">Reproduction Setups</span></a> and
+<a class="reference internal" href="general.html#asdf"><span class="std std-ref">ASDF</span></a>). The recording can then be used to analyze the SSR output or
+to replay it without the SSR using a software player like “ecaplay” (<a class="reference external" href="http://eca.cx/ecasound/">http://eca.cx/ecasound/</a>).</p>
+</div>
+</div>
+<div class="section" id="configuration-files">
+<span id="ssr-configuration-file"></span><h2>Configuration Files<a class="headerlink" href="#configuration-files" title="Permalink to this headline">¶</a></h2>
+<p>The general configuration of the SSR (whether GUI is enabled, which tracker
+to use, and most other command line arguments) can be specified in a
+configuration file (e.g.
+<code class="docutils literal notranslate"><span class="pre">ssr.conf</span></code>). By specifying your settings in such a file, you avoid
+having to give explicit command line options every time you start the
+SSR. We have added the example
+<a class="reference download internal" download="" href="_downloads/1c38b60f4ca38dfb2bd88b809d371afa/ssr.conf.example"><code class="xref download docutils literal notranslate"><span class="pre">data/ssr.conf.example</span></code></a>,
+which mentions
+all possible parameters. Take a look inside, it is rather
+self-explanatory. There are three possibilities to specify a
+configuration file:</p>
+<p>Configuration files are loaded in the following order, if certain options are
+specified more than once, the last occurrence counts. This means that it is
+not the last file that is loaded that counts but rather the last occurrence at
+which a given setting is specified.</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/Library/SoundScapeRenderer/ssr.conf</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/etc/ssr.conf</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$HOME/Library/SoundScapeRenderer/ssr.conf</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$HOME/.ssr/ssr.conf</span></code></p></li>
+<li><p>the path(s) specified with the <code class="docutils literal notranslate"><span class="pre">--config</span></code>/<code class="docutils literal notranslate"><span class="pre">-c</span></code> option(s) (e.g.,
+<code class="docutils literal notranslate"><span class="pre">ssr</span> <span class="pre">-c</span> <span class="pre">my_config.file</span></code>)</p></li>
+</ol>
+<p>We explicitly mention one parameter here that might be of immediate
+interest for you: <code class="docutils literal notranslate"><span class="pre">MASTER_VOLUME_CORRECTION</span></code>. This a correction in
+dB (!) that is applied – as you might guess – to the master volume. The
+motivation is to have means to adopt the general perceived loudness of
+the reproduction of a given system. Factors like the distance of the
+loudspeakers to the listener or the typical distance of virtual sound
+sources influence the resulting loudness, which can be adjusted to the
+desired level by means of the <code class="docutils literal notranslate"><span class="pre">MASTER_VOLUME_CORRECTION</span></code>. Of course,
+there’s also a command line alternative (<code class="docutils literal notranslate"><span class="pre">--master-volume-correction</span></code>).</p>
+</div>
+<div class="section" id="head-tracking">
+<span id="id2"></span><h2>Head Tracking<a class="headerlink" href="#head-tracking" title="Permalink to this headline">¶</a></h2>
+<p>We provide integration of the <em>InterSense InertiaCube3</em> tracking sensor,
+the <em>Polhemus Fastrak</em> and the <em>Polhemus Patriot</em>. They are used to update the orientation of
+the reference (in binaural reproduction this is the listener) in
+real-time. Please read Sections <a class="reference internal" href="#prep-isense"><span class="std std-ref">Preparing Intersense</span></a> and
+<a class="reference internal" href="#prp-pol"><span class="std std-ref">Preparing Polhemus</span></a> if you want to compile the SSR with the
+support
+for these trackers.</p>
+<p>Note that on startup, the SSR tries to find the tracker. If it fails, it
+continues without it. If you use a tracker, make sure that you have the
+appropriate rights to read from the respective port.</p>
+<p>You can calibrate the tracker while the SSR is running by pressing
+<code class="docutils literal notranslate"><span class="pre">Return</span></code>. The instantaneous orientation will then be interpreted as
+straight forward, i.e. upwards on the screen (<span class="math notranslate nohighlight">\(\alpha = 90^\circ\)</span>).</p>
+<div class="section" id="preparing-intersense-inertiacube3">
+<span id="prep-isense"></span><h3>Preparing InterSense InertiaCube3<a class="headerlink" href="#preparing-intersense-inertiacube3" title="Permalink to this headline">¶</a></h3>
+<p>If you want to compile the SSR with support for the <em>InterSense
+InertiaCube3</em> tracking sensor, please download the <em>InterSense Software
+Development Kit</em> (SDK) from the InterSense website (<a class="reference external" href="http://www.intersense.com">http://www.intersense.com</a>;
+Support → Downloads → Development and Troubleshooting Tools).
+Unpack the archive and place the files</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">isense.h</span></code> and <code class="docutils literal notranslate"><span class="pre">types.h</span></code> to <code class="docutils literal notranslate"><span class="pre">/usr/local/include</span></code>, and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">libisense.so</span></code> (the version appropriate for your processor type) to
+<code class="docutils literal notranslate"><span class="pre">usr/local/lib</span></code>.</p></li>
+</ul>
+<p>The SSR <code class="docutils literal notranslate"><span class="pre">configuration</span></code> script will automatically detect the presence
+of the files described above and if they are found, enable the
+compilation for the support of this tracker. To disable this tracker,
+use <code class="docutils literal notranslate"><span class="pre">./configure</span> <span class="pre">--disable-intersense</span></code> and recompile.</p>
+<p>If you encounter an error-message similar to
+<code class="docutils literal notranslate"><span class="pre">libisense.so:</span> <span class="pre">cannot</span> <span class="pre">open</span> <span class="pre">shared</span> <span class="pre">object</span> <span class="pre">file:</span> <span class="pre">No</span> <span class="pre">such</span> <span class="pre">file</span> <span class="pre">or</span> <span class="pre">directory</span></code>,
+but the file is placed correctly, run <code class="docutils literal notranslate"><span class="pre">ldconfig</span></code>.</p>
+<p>Make sure that you have the required access rights to the tracker before
+starting SSR. For you are using the USB connection type</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo chmod a+rw /dev/ttyUSBX
+</pre></div>
+</div>
+<p>whereby <code class="docutils literal notranslate"><span class="pre">X</span></code> can be any digit or number. If you are not sure which port is
+the tracker then unplug the tracker, type</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ls /dev/ttyUSB*
+</pre></div>
+</div>
+<p>replug the tracker, execute above command again and see which port was added.
+That one is the tracker. It’s likely that it is the one whose name contains
+the highest number.</p>
+</div>
+<div class="section" id="preparing-polhemus-fastrak-patriot">
+<span id="prp-pol"></span><h3>Preparing Polhemus Fastrak/Patriot<a class="headerlink" href="#preparing-polhemus-fastrak-patriot" title="Permalink to this headline">¶</a></h3>
+<p>For incorporation of the <em>Polhemus Fastrak/Patriot</em>
+with serial connection, no additional libraries are required. Make sure that
+you have the required access rights to the tracker before starting SSR by
+typing something like</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo chmod a+rw /dev/ttyS0
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo chmod a+rw /dev/ttyS1
+</pre></div>
+</div>
+<p>or so.</p>
+<p>If you want to disable this tracker, use <code class="docutils literal notranslate"><span class="pre">./configure</span> <span class="pre">--disable-polhemus</span></code>
+and recompile.</p>
+</div>
+<div class="section" id="preparing-vrpn">
+<h3>Preparing VRPN<a class="headerlink" href="#preparing-vrpn" title="Permalink to this headline">¶</a></h3>
+<p>In order to use <em>Virtual Reality Peripheral Network</em> (<a class="reference external" href="http://www.cs.unc.edu/Research/vrpn/index.html">VRPN</a>) compatible
+trackers create a config file <code class="docutils literal notranslate"><span class="pre">vrpn.cfg</span></code> with one of the following lines (or
+similar)</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>vrpn_Tracker_Fastrak MyFastrak /dev/ttyUSB0 <span class="m">115200</span>
+vrpn_Tracker_Fastrak MyOtherFastrak COM1 <span class="m">115200</span>
+vrpn_Tracker_Liberty MyPatriot /dev/ttyUSB1 <span class="m">115200</span>
+</pre></div>
+</div>
+<p>… and start <code class="docutils literal notranslate"><span class="pre">vrpn_server</span></code>. You can choose the name of the Tracker
+arbitrarily. Then, start the SSR with the given Tracker name, e.g.:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ssr-binaural --tracker<span class="o">=</span>vrpn --tracker-port<span class="o">=</span>MyFastrak@localhost
+</pre></div>
+</div>
+<p>If the tracker runs on a different computer, use its hostname (or IP address)
+instead of localhost. You can of course select your head tracker settings by
+means of <a class="reference internal" href="#ssr-configuration-file"><span class="std std-ref">Configuration Files</span></a>.</p>
+</div>
+</div>
+<div class="section" id="using-the-ssr-with-different-audio-clients">
+<h2>Using the SSR with different audio clients<a class="headerlink" href="#using-the-ssr-with-different-audio-clients" title="Permalink to this headline">¶</a></h2>
+<p>This page contains some short description how to connect your own audio files
+with the SSR using different audio players.</p>
+<div class="section" id="vlc-media-player">
+<h3>VLC Media Player<a class="headerlink" href="#vlc-media-player" title="Permalink to this headline">¶</a></h3>
+<p>How to connect the SSR in binaural playback mode with the own audio library
+using Jack and VLC Media Player:</p>
+<p>After installing Jack and the SSR (with all needed components: see :ref:`
+Configuring and Compiling &lt;configuring&gt;`) it is necessary to install the VLC
+Media Player with its Jack plugin (for example UBUNTU):</p>
+<ol class="arabic">
+<li><p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">vlc</span> <span class="pre">vlc-plugin-jack</span></code></p>
+<blockquote>
+<div><p>(or use the packet manager of your choice instead of the command line and
+install: vlc and vlc-plugin-jack)</p>
+</div></blockquote>
+</li>
+</ol>
+<p>2. After installing open VLC Media Player and navigate to Tools-&gt;Preferences
+Select “All” on the bottom left corner In the appearing menu on the left
+navigate to “Audio”-&gt;”Output Module” and extend it by using “+”</p>
+<p>3. In the submenu of “Output Module” select “JACK” and replace “system” by ”
+Binaural-Renderer” in the “Connect to clients matching”-box. Do not forget to
+enable “Automatically connect to writable clients” above. (Otherwise you have
+to connect the audio output of vlc with the SSR input after every played audio
+file using jack.)</p>
+<blockquote>
+<div><p>(<em>Note</em>: If you want to use another Renderer, e.g. for WFS, you have to
+enter “WFS-Renderer” in the box)</p>
+<div class="figure align-center">
+<img alt="_images/screenshot_vlc.png" src="_images/screenshot_vlc.png" />
+</div>
+</div></blockquote>
+<ol class="arabic" start="4">
+<li><p>Save your changes.</p></li>
+<li><p>Start everything together using the command line:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>qjackctl -s <span class="p">&amp;</span> vlc <span class="p">&amp;</span> ssr --gui /<span class="s2">&quot;path_of_your_scene_file(s)&quot;</span>/stereo.asd <span class="p">&amp;</span>
+
+This will start jack, vlc and the ssr with the GUI and a provided stereo
+scene <span class="o">(</span>TODO: LINK<span class="o">)</span> <span class="o">(</span>stereo.asd<span class="o">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Open an audio file in vlc and press play</p></li>
+</ol>
+</div>
+<div class="section" id="itunes">
+<h3>iTunes<a class="headerlink" href="#itunes" title="Permalink to this headline">¶</a></h3>
+<p>TODO</p>
+</div>
+<div class="section" id="mplayer">
+<h3>mPlayer<a class="headerlink" href="#mplayer" title="Permalink to this headline">¶</a></h3>
+<p>TODO</p>
+</div>
+</div>
+<div class="section" id="mac-os-x">
+<span id="id3"></span><h2>Mac OS X<a class="headerlink" href="#mac-os-x" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="jack-on-mac-os-x">
+<h3>JACK on Mac OS X<a class="headerlink" href="#jack-on-mac-os-x" title="Permalink to this headline">¶</a></h3>
+<p>Tested with version 0.87 (64 bit) which includes:</p>
+<ul class="simple">
+<li><p>Jackdmp 1.9.6</p></li>
+<li><p>JackRouter 0.9.3</p></li>
+<li><p>JackPilot 1.7.0</p></li>
+</ul>
+<p>Note that the site <a class="reference external" href="http://www.jackosx.com/">http://www.jackosx.com/</a> is outdated. The latest version of JACK is
+available from <a class="reference external" href="http://jackaudio.org/downloads/">http://jackaudio.org/downloads/</a>.</p>
+<p>Or, you can install JACK using <a class="reference internal" href="#homebrew">Homebrew</a>.</p>
+<p>If you are using OS X El Capitan or newer, make sure that you are installing the version “jackOSX 0.92_b3” from <a class="reference external" href="http://jackaudio.org/downloads/">http://jackaudio.org/downloads/</a>. JACK versions installed from other sources tend not to work on these versions of OS X.</p>
+</div>
+<div class="section" id="application-bundle">
+<h3>Application Bundle<a class="headerlink" href="#application-bundle" title="Permalink to this headline">¶</a></h3>
+<p>This assumes that you are using the precompiled SSR application bundle for Mac OS
+X. If you want to build the SSR yourself, have a look at <a class="reference internal" href="#building-from-source">Building from Source</a>.</p>
+<p>You can download the application bundle from <a class="reference external" href="http://spatialaudio.net/ssr">http://spatialaudio.net/ssr</a>. You will need
+JACK as prerequisite. Refer to <a class="reference internal" href="#jack-on-mac-os-x">JACK on Mac OS X</a> for instructions how to obtain and
+install it.</p>
+<p>The installation should be straightforward. Just double-click on the <code class="docutils literal notranslate"><span class="pre">.dmg</span></code> file and
+drag the <code class="docutils literal notranslate"><span class="pre">SoundScapeRenderer-x.x.x</span></code> folder to your <code class="docutils literal notranslate"><span class="pre">Applications</span></code> folder. Done. When
+double-clicking the SSR application bundle, it will indicate to you that you should
+download and install JACK (that’s what this JACK.webloc thingy wants). If JACK is
+installed on your computer, then simply ignore this step and drag the SSR folder to your
+<code class="docutils literal notranslate"><span class="pre">Applications</span></code> folder.</p>
+<p>The application bundle can be placed anywhere, but spaces in path names might
+cause trouble, so it’s better to avoid them. Another thing is that Mac OS X
+sort of adds applications placed in the <code class="docutils literal notranslate"><span class="pre">/Applications</span></code> folder to the
+environment, so lets assume you put the SSR there (This also works for
+<code class="docutils literal notranslate"><span class="pre">$HOME/Applications</span></code>).</p>
+<p>Under new versions of Mac OS (Sierra and up) the SoundScapeRenderer executable might be stuck in quarantine resulting in files not being loaded properly. The corresponding error message might look like this:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>/private/var/folders/_t/67rf88lx507btn91x6g_vfk40000gp/T/AppTranslocation/42F7F94E-AED9-4F39-8647-41D898CCE032/d/SoundScapeRenderer.app/Contents/MacOS/ssr: line <span class="m">48</span>: <span class="m">36804</span> Abort trap: <span class="m">6</span>           <span class="nv">$SSR_EXECUTABLE</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">OPTIONS</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>You can allow the SoundScapeRender to run from its original location by running:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>xattr -d com.apple.quarantine SoundScapeRenderer.app
+</pre></div>
+</div>
+<p>The following warning can occur on High Sierra when using the file dialog:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>objc<span class="o">[</span><span class="m">50474</span><span class="o">]</span>: Class FIFinderSyncExtensionHost is implemented in both /System/Library/PrivateFrameworks/FinderKit.framework/Versions/A/FinderKit <span class="o">(</span>0x7fffa1883c90<span class="o">)</span> and /System/Library/PrivateFrameworks/FileProvider.framework/OverrideBundles/FinderSyncCollaborationFileProviderOverride.bundle/Contents/MacOS/FinderSyncCollaborationFileProviderOverride <span class="o">(</span>0x11f84ccd8<span class="o">)</span>. One of the two will be used. Which one is undefined.
+</pre></div>
+</div>
+<p>It is a bug outside of SSR.</p>
+</div>
+<div class="section" id="building-from-source">
+<h3>Building from Source<a class="headerlink" href="#building-from-source" title="Permalink to this headline">¶</a></h3>
+<p>The following is an overview on how to set up the build environment for SSR on Mac OS X.</p>
+<div class="section" id="what-to-install-first">
+<h4>What to install first?<a class="headerlink" href="#what-to-install-first" title="Permalink to this headline">¶</a></h4>
+<p>You can make your life much easier with a decent package manager, name Homebrew (<a class="reference external" href="https://brew.sh/">https://brew.sh/</a>) or MacPorts (<a class="reference external" href="https://www.macports.org/">https://www.macports.org/</a>). Both greatly simplify the process of installing and managing dependencies.</p>
+<div class="section" id="homebrew-recommended">
+<span id="homebrew"></span><h5>Homebrew (recommended)<a class="headerlink" href="#homebrew-recommended" title="Permalink to this headline">¶</a></h5>
+<p>After installing homebrew, you can simply run the following line to update homebrew’s
+internal repository, upgrade itself and install all necessary dependencies:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>brew update <span class="o">&amp;&amp;</span> brew upgrade <span class="o">&amp;&amp;</span> brew install autoconf fftw libsndfile jack ecasound qt asio --c++11
+</pre></div>
+</div>
+<p>If Qt is not found by the build system, i.e., if the build system proposes to compile without GUI, then run the following commands (using the according paths on your system) or add them to your <code class="docutils literal notranslate"><span class="pre">~/.bash_profile</span></code> file:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/opt/qt/bin:<span class="nv">$PATH</span>
+<span class="nb">export</span> <span class="nv">PKG_CONFIG_PATH</span><span class="o">=</span>/usr/local/opt/qt/lib/pkgconfig
+</pre></div>
+</div>
+<p>To build the manual and documentation, you can also install help2man and doxygen:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>brew install help2man doxygen
+<span class="nb">export</span> <span class="nv">LC_CTYPE</span><span class="o">=</span>en_US.UTF-8
+</pre></div>
+</div>
+<p>On El Capitan and newer OS X versions, it has happened that only the help2man version installed through MacPorts worked properly.</p>
+</div>
+<div class="section" id="macports-not-recommended">
+<h5>MacPorts (not recommended)<a class="headerlink" href="#macports-not-recommended" title="Permalink to this headline">¶</a></h5>
+<p>Tested with version 1.9.2</p>
+<p>Download here: <a class="reference external" href="https://www.macports.org/">https://www.macports.org/</a></p>
+<p>Then open a terminal and do an initial ports tree update</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo port selfupdate
+</pre></div>
+</div>
+<p>If that is not working it’s most likely because the router won’t let you use
+rsync. So we switch to http:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo nano /opt/local/etc/macports/sources.conf
+</pre></div>
+</div>
+<p>Comment out the rsync entry</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1">#rsync://rsync.macports.org/release/ports/ [default]</span>
+</pre></div>
+</div>
+<p>And add a line</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>http://www.macports.org/files/ports.tar.gz <span class="o">[</span>default<span class="o">]</span>
+</pre></div>
+</div>
+<p>Now save the file and try the selfupdate again.</p>
+</div>
+<div class="section" id="macports-ports">
+<h5>MacPorts ports<a class="headerlink" href="#macports-ports" title="Permalink to this headline">¶</a></h5>
+<p>These ports have to be installed (dependencies are installed automatically)</p>
+<ul class="simple">
+<li><p>gcc49 (or some other version of GCC, but at least gcc47)</p></li>
+<li><p>pkgconfig</p></li>
+<li><p>libsndfile</p></li>
+<li><p>libsamplerate</p></li>
+<li><p>fftw-3-single</p></li>
+<li><p>qt5-mac</p></li>
+<li><p>libxml2</p></li>
+</ul>
+<p>If you want, you can also use clang instead of GCC to compile the SSR.</p>
+<p>If you want to install the newest SSR development version directly from the Git repository, you’ll need those as well:</p>
+<ul class="simple">
+<li><p>autoconf</p></li>
+<li><p>automake</p></li>
+<li><p>help2man</p></li>
+</ul>
+<p>Ports are installed using</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo port install &lt;portname&gt;
+</pre></div>
+</div>
+<p>Because ports are compiled locally, it may take a long time to install all
+ports. Issuing one command to install all ports might be more convenient:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo sh -c <span class="s2">&quot;port install gcc49 &amp;&amp; port install pkgconfig &amp;&amp; port install libsndfile &amp;&amp; port install libsamplerate &amp;&amp; port install fftw-3-single &amp;&amp; port install qt5-mac &amp;&amp; port install libxml2&quot;</span>
+</pre></div>
+</div>
+<p>Lastly, you need to install the asio library if you want to compile with the network
+interface. You can download it from: <a class="reference external" href="http://think-async.com">http://think-async.com</a></p>
+</div>
+<div class="section" id="ecasound">
+<span id="id4"></span><h5>Ecasound<a class="headerlink" href="#ecasound" title="Permalink to this headline">¶</a></h5>
+<p>Tested with version 2.7.2</p>
+<p>If you don’t want to get Ecasound from <a class="reference internal" href="#homebrew">Homebrew</a>, then download the source code from
+<a class="reference external" href="http://www.eca.cx/ecasound/">http://www.eca.cx/ecasound/</a>. (If you choose to use Homebrew and you’re experiencing
+problems, then you might want to take a look at <a class="reference internal" href="#ecasound-cannot-open-a-jack-port"><span class="std std-ref">Ecasound cannot open a JACK port</span></a>).</p>
+<p>It didn’t work with 2.9.0 for us, older versions can be found there:
+<a class="reference external" href="https://ecasound.seul.org/download/">https://ecasound.seul.org/download/</a>.</p>
+<p>In Terminal go into the unpacked ecasound folder and do:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure <span class="nv">CPPFLAGS</span><span class="o">=</span>-I/opt/local/include <span class="nv">LIBS</span><span class="o">=</span>-L/opt/local/lib
+</pre></div>
+</div>
+<p>If JACK cannot be found, you can also try this:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure <span class="nv">CPPFLAGS</span><span class="o">=</span><span class="s2">&quot;-I/opt/local/include -I/usr/local/include&quot;</span> <span class="nv">LIBS</span><span class="o">=</span>-L/opt/local/lib
+</pre></div>
+</div>
+<p>When the configure script is finished, check if libsndfile, libsamplerate and
+JACK are enabled. It should look something like that:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>...
+-----------------------------------------------------------------
+Following features were selected:
+...
+Libsndfile:             yes
+...
+JACK support:           yes
+Libsamplerate support   yes
+...
+-----------------------------------------------------------------
+...
+</pre></div>
+</div>
+<p>If not, check that JACK and all MacPort packages mentioned above are installed.
+If everything looks OK, continue with:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>make
+make install
+</pre></div>
+</div>
+<p>For the last step you need write access to <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code>.
+If it doesn’t work, use this instead:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo make install
+</pre></div>
+</div>
+</div>
+<div class="section" id="ecasound-git-version">
+<h5>Ecasound – git version<a class="headerlink" href="#ecasound-git-version" title="Permalink to this headline">¶</a></h5>
+<p>Note: if you successfully installed Ecasound 2.7.2, you <em>don’t</em> need this!</p>
+<p>If you want to use the newest Ecasound version from their git repository
+(<a class="reference external" href="https://ecasound.seul.org/ecasound.git">https://ecasound.seul.org/ecasound.git</a>) with OS X 10.9 (Mavericks),
+you can try this:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure <span class="nv">CXX</span><span class="o">=</span><span class="s2">&quot;clang++ -stdlib=libc++&quot;</span> <span class="nv">CPPFLAGS</span><span class="o">=</span>-D_DARWIN_C_SOURCE
+</pre></div>
+</div>
+<p>Note, however, that you will have to use the same -stdlib options when
+configuring the SSR.</p>
+</div>
+<div class="section" id="standard-build">
+<h5>Standard build<a class="headerlink" href="#standard-build" title="Permalink to this headline">¶</a></h5>
+<p>Get the SSR Source tarball and unpack it where ever you wish, then open a
+Terminal window and <code class="docutils literal notranslate"><span class="pre">cd</span></code> into the newly created folder.</p>
+<p>First of all, you have to issue this command in order for <code class="docutils literal notranslate"><span class="pre">pkg-config</span></code> to
+find the installed JACK version:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PKG_CONFIG_PATH</span><span class="o">=</span>/usr/local/lib/pkgconfig
+</pre></div>
+</div>
+<p>You now have two options:</p>
+<p>1) If you want to build a clickable application bundle and wrap it into a
+<code class="docutils literal notranslate"><span class="pre">.dmg</span> <span class="pre">image</span></code>, you can build the SSR in <em>Mac OS X</em> style:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure --enable-app-bundle
+make
+make dmg
+</pre></div>
+</div>
+<p>You can also name the <code class="docutils literal notranslate"><span class="pre">.dmg</span></code>:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure
+--enable-app-bundle<span class="o">=</span><span class="s2">&quot;MyVeryOwnSoundScapeRenderer.dmg&quot;</span>
+make
+make dmg
+</pre></div>
+</div>
+<p>The resulting <code class="docutils literal notranslate"><span class="pre">.dmg</span></code> is output to the SSR source folder. The application
+bundle inside contains all non-system dynamic libraries needed by the SSR,
+except the JACK libs. So it should run on every Mac OS X 10.6.x with JACK
+installed.</p>
+<p>2) If you want to build and install in <em>Linux</em> style:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure
+make
+make install
+</pre></div>
+</div>
+<p>For the last step you need write access in <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code>. If it doesn’t work,
+use this instead:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo make install
+</pre></div>
+</div>
+<p>The binaries do not get wrapped in an application bundle but they will be
+installed in <code class="docutils literal notranslate"><span class="pre">/usr/local/bin</span></code> and some files will be installed in <code class="docutils literal notranslate"><span class="pre">/usr/</span>
+<span class="pre">local/share/ssr</span></code>. If you want to remove all these file again, just do:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>make uninstall
+</pre></div>
+</div>
+<p>or (if you used <code class="docutils literal notranslate"><span class="pre">sudo</span></code> before):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo make uninstall
+</pre></div>
+</div>
+<p>You can start the SSR and pass arguments to the SSR the same way you would do
+it on Linux.</p>
+</div>
+<div class="section" id="build-with-intersense-tracker-support">
+<span id="mac-intersense-support"></span><h5>Build with InterSense tracker support<a class="headerlink" href="#build-with-intersense-tracker-support" title="Permalink to this headline">¶</a></h5>
+<p>Tested with IntertiaCube3, software version 4.17</p>
+<p>Get the SDK from <a class="reference external" href="http://www.intersense.com/">http://www.intersense.com/</a>. It should contain a dynamic
+library called <code class="docutils literal notranslate"><span class="pre">libisense.dylib</span></code> and two header files called <code class="docutils literal notranslate"><span class="pre">isense.h</span></code>
+and <code class="docutils literal notranslate"><span class="pre">types.h</span></code>, respectively.</p>
+<p>Put <code class="docutils literal notranslate"><span class="pre">libisense.dylib</span></code> into <code class="docutils literal notranslate"><span class="pre">/usr/local/lib</span></code> and the header files into <code class="docutils literal notranslate"><span class="pre">/</span>
+<span class="pre">usr/local/include/intersense</span></code>.</p>
+<p>Then build like described above, but add <code class="docutils literal notranslate"><span class="pre">CPPFLAGS=-I/usr/local/include/</span>
+<span class="pre">intersense</span></code> to the configure parameters:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PKG_CONFIG_PATH</span><span class="o">=</span>/usr/local/lib/pkgconfig
+./configure <span class="nv">CPPFLAGS</span><span class="o">=</span>-I/usr/local/include/intersense
+</pre></div>
+</div>
+<p>For some strange reason the full path of <code class="docutils literal notranslate"><span class="pre">libisense.dylib</span></code> is not written to
+the header of the binary. So if you configure with <code class="docutils literal notranslate"><span class="pre">--enable-app-bundle</span></code> and
+then do <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">dmg</span></code> to build an application bundle, a tool called
+<code class="docutils literal notranslate"><span class="pre">dylibbundler</span></code> will ask you to enter its path (<code class="docutils literal notranslate"><span class="pre">/usr/local/lib</span></code>) several
+times.</p>
+</div>
+</div>
+</div>
+<div class="section" id="using-the-gui">
+<h3>Using the GUI<a class="headerlink" href="#using-the-gui" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Run the JackPilot and hit start.</p></li>
+<li><p>Double-click the SoundScape Renderer icon <img alt="icon" src="_images/ssr_logo_mac_30px.png" />, select the renderer type,
+and off you go!</p></li>
+</ol>
+<p>When the SSR is started, a Terminal window displaying the standard SSR output
+is automatically opened. If the SSR closes with an error, it remains open for
+you to inspect the error messages.</p>
+<p>The SSR and JACK must have the same sampling rate, otherwise error will be
+generated.</p>
+<p>More options can be specified by using the config file. The details of using
+the config file is described on the Section
+<a class="reference internal" href="#ssr-configuration-file"><span class="std std-ref">Configuration Files</span></a>.</p>
+</div>
+<div class="section" id="running-via-the-command-line-terminal">
+<h3>Running via the Command Line (Terminal)<a class="headerlink" href="#running-via-the-command-line-terminal" title="Permalink to this headline">¶</a></h3>
+<p>The application bundle is more convenient, but brings limitations when using
+the command line. The included start script changes the working directory to
+the directory that includes the SSR application bundle, so only absolute paths
+should be used on the command line.</p>
+<p>What can be done using configuration files, should be done using configuration
+files.</p>
+<p>Both JACK and the SSR can be started on the command line by using:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>open -a JackPilot
+open -a SoundScapeRenderer
+</pre></div>
+</div>
+<p>If the SSR is placed in <code class="docutils literal notranslate"><span class="pre">/Applications</span></code> (or <code class="docutils literal notranslate"><span class="pre">$HOME/Applications</span></code>) and was
+run several times already, OS X should find it. If not, you would have to
+specify the full path, i.e.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>open /Applications/SoundScapeRenderer-0.4.0/SoundScapeRenderer.app
+</pre></div>
+</div>
+<p>The SSR starts with a prompt for renderer selection, with the default renderer
+set on the Binaural renderer. As mentioned above in Section
+<a class="reference internal" href="#ssr-configuration-file"><span class="std std-ref">Configuration Files</span></a>,
+more options at the start up can
+be specified using the configuration file.</p>
+<p>To start the SSR using a different renderer module and skip the prompt for the
+selection do:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>open -a SoundScapeRenderer --args --binaural
+</pre></div>
+</div>
+<p>Of course, instead of <code class="docutils literal notranslate"><span class="pre">--binaural</span></code>, you can also use any of the other
+available renderers (e.g. <code class="docutils literal notranslate"><span class="pre">--wfs</span></code> for Wave Field Synthesis). To see all
+available command line arguments (specifying a renderer skips the prompt for renderer
+selection):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>open -a SoundScapeRenderer --args --binaural <span class="s2">&quot;--help&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The arguments other than the renderer selection have to be enclosed in
+quotation marks (<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>)!</p>
+</div>
+<p>To load a scene do:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>open -a SoundScapeRenderer --args --binaural <span class="s2">&quot;/absolute/path/to/scene.asd&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Paths have to be absolute!</p>
+</div>
+<p>To load a scene that has spaces in its path name do:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>open -a SoundScapeRenderer --args --binaural <span class="s2">&quot;/path/to/file\ with\ spaces.asd&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Spaces have to be escaped using backslashes!</p>
+</div>
+<p>In addition to the config files in standard locations mentioned above, you can
+also specify a config file on the command line:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>open -a SoundScapeRenderer --args --binaural <span class="s2">&quot;--config=my_config_file.conf&quot;</span>
+</pre></div>
+</div>
+<p>When you want to record the output of the SSR and play it back again, you
+should always provide the .wav extension of the file name, along with the
+absolute path of your desired destination location for the file. As an
+example, if you want to run the SSR and record the output to a file name
+output.wav, you would need the command given below:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>open -a SoundScapeRenderer --args --binaural <span class="s2">&quot;--record=/tmp/output.wav&quot;</span>
+</pre></div>
+</div>
+<p>But if you use a relative path instead of the absolute path, the file that
+contains the output of the SSR will be saved inside the directory of the
+SoundScape Renderer in the Applications folder.</p>
+<p>If you want to start more than one instance of SSR, then add the <code class="docutils literal notranslate"><span class="pre">-n</span></code> option to the call
+of <code class="docutils literal notranslate"><span class="pre">open</span></code> for all instances other than the first one:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>open -n -a SoundScapeRenderer --binaural
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-a-head-tracker">
+<h3>Using a Head-Tracker<a class="headerlink" href="#using-a-head-tracker" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="running-with-intersense-tracker-support">
+<h4>Running with InterSense tracker support<a class="headerlink" href="#running-with-intersense-tracker-support" title="Permalink to this headline">¶</a></h4>
+<p>Due to copyright reasons, the SSR does not come with a built-in InterSense
+tracker support. So first you have to build the SSR with <a class="reference internal" href="#mac-intersense-support"><span class="std std-ref">InterSense
+tracker support</span></a> yourself or ask someone to do it for
+you.</p>
+<p>If you are using a USB-to-Serial interface with your tracker, you need to
+install drivers for that. This seems to work fine for the interface made by
+InterSense: <a class="reference external" href="http://www.ftdichip.com/Drivers/VCP.htm">http://www.ftdichip.com/Drivers/VCP.htm</a></p>
+<p>To check if the system sees the tracker do:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ls -l /dev/tty.usb*
+</pre></div>
+</div>
+<p>On the MacBooks tested, the serial ports were called <code class="docutils literal notranslate"><span class="pre">/dev/tty.usbserial-</span>
+<span class="pre">00001004</span></code> or <code class="docutils literal notranslate"><span class="pre">/dev/tty.usbserial-00002006</span></code> depending on which USB port was
+used.</p>
+<p>To make the SSR use the InterSense tracker with these ports, you have two
+options:</p>
+<p>Using the command line (only one port can be specified):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>open -a SoundScapeRenderer --args --binaural <span class="s2">&quot;--tracker=intersense</span>
+<span class="s2">--tracker-port=/dev/tty.usbserial-XXXXXXXX&quot;</span>
+</pre></div>
+</div>
+<p>… or using config files:</p>
+<p>Add these lines to a config file (multiple ports can be specified):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">TRACKER</span> <span class="o">=</span> intersense
+<span class="nv">TRACKER_PORTS</span> <span class="o">=</span> /dev/tty.usbserial-XXXXXXXX /dev/tty.usbserial-YYYYYYYY
+</pre></div>
+</div>
+<p>It’s recommended to use the config file approach - best use a global :ref:`
+config file&lt;ssr_configuration_file&gt;`.</p>
+</div>
+<div class="section" id="running-with-razor-ahrs-tracker-support">
+<h4>Running with Razor AHRS tracker support<a class="headerlink" href="#running-with-razor-ahrs-tracker-support" title="Permalink to this headline">¶</a></h4>
+<p>If you happen not to own a Polhemus or InterSense tracker to do your head-
+tracking, an alternative would be to use our DIY low-cost <a class="reference external" href="https://github.com/Razor-AHRS/razor-9dof-ahrs/wiki/Tutorial">Razor AHRS tracker</a>.</p>
+<p>If you have Arduino installed on you machine, FTDI drivers will be there too.
+Otherwise get the driver from <a class="reference external" href="http://www.ftdichip.com/Drivers/VCP.htm">http://www.ftdichip.com/Drivers/VCP.htm</a> .</p>
+<p>To check if the system sees the tracker do:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ls -l /dev/tty.usb*
+</pre></div>
+</div>
+<p>This should give you something like <code class="docutils literal notranslate"><span class="pre">/dev/tty.usbserial-A700eEhN</span></code>.</p>
+<p>To make the SSR use this Razor AHRS tracker, you have two options:</p>
+<p>Using the command line:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>open -a SoundScapeRenderer --args --binaural <span class="s2">&quot;--tracker=razor</span>
+<span class="s2">--tracker-port=/dev/tty.usbserial-XXXXXXXX&quot;</span>
+</pre></div>
+</div>
+<p>… or using config files:</p>
+<p>Add these lines to a config file:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">TRACKER</span> <span class="o">=</span> intersense
+<span class="nv">TRACKER_PORTS</span> <span class="o">=</span> /dev/tty.usbserial-XXXXXXXX
+</pre></div>
+</div>
+<p>It’s recommended to use the config file approach - best use a global
+<a class="reference internal" href="#ssr-configuration-file"><span class="std std-ref">config file</span></a>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="ms-windows">
+<h2>MS Windows<a class="headerlink" href="#ms-windows" title="Permalink to this headline">¶</a></h2>
+<p>The MS Windows version of SSR is experimental at this stage. Find the pre-release of the executables at <a class="reference external" href="https://github.com/chris-hld/ssr/releases">https://github.com/chris-hld/ssr/releases</a>. Note that this SSR version only works with live inputs currently (it cannot play audio files). It has no limitation otherwise.</p>
+</div>
+<div class="section" id="using-the-ssr-with-daws">
+<h2>Using the SSR with DAWs<a class="headerlink" href="#using-the-ssr-with-daws" title="Permalink to this headline">¶</a></h2>
+<p>As stated before, the SSR is currently not able to dynamically replay
+audio files (refer to Section <a class="reference internal" href="general.html#asdf"><span class="std std-ref">ASDF</span></a>). If your audio scenes are
+complex, you might want to consider using the SSR together with a
+digital audio work station (DAW). To do so, you simply have to create as
+many sources in the SSR as you have audio tracks in your respective DAW
+project and assign live inputs to the sources. Amongst the ASDF examples
+we provide on SSR website <a class="reference external" href="http://spatialaudio.net/ssr/">http://spatialaudio.net/ssr/</a> you’ll find an scene
+description that does exactly this.</p>
+<p>DAWs like Ardour (<a class="reference external" href="http://www.ardour.org">http://www.ardour.org</a>) support JACK and their use is therefore
+straightforward. DAWs which do not run on Linux or do not support JACK
+can be connected via the input of the sound card.</p>
+<p>In the future we will provide a VST plug-in which will allow you to
+dynamically operate all virtual source’s properties (like e.g. a
+source’s position or level etc.). You will then be able to have the full
+SSR functionality controlled from your DAW.</p>
+</div>
+<div class="section" id="known-issues-linux-mac-os-x">
+<h2>Known Issues (Linux &amp; Mac OS X)<a class="headerlink" href="#known-issues-linux-mac-os-x" title="Permalink to this headline">¶</a></h2>
+<p>Also visit <a class="reference external" href="https://github.com/SoundScapeRenderer/ssr/wiki/Known-Issues">https://github.com/SoundScapeRenderer/ssr/wiki/Known-Issues</a> for
+updated known issues.</p>
+<div class="section" id="make-dmg-on-mac-os-x-chokes-on-symbolic-links">
+<h3><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">dmg</span></code> on Mac OS X chokes on symbolic links<a class="headerlink" href="#make-dmg-on-mac-os-x-chokes-on-symbolic-links" title="Permalink to this headline">¶</a></h3>
+<p>On some file system (e.g. network shares with ACLs) you might get an error
+like this:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>... copy helper ... copy error <span class="o">(</span>canceling<span class="o">)</span>: /Volumes/SoundScape Renderer ...
+... Operation not supported ... could not access /Volumes/...
+hdiutil: create failed - Operation not supported
+make<span class="o">[</span><span class="m">1</span><span class="o">]</span>: *** <span class="o">[</span>dmg<span class="o">]</span> Error <span class="m">1</span>
+make: *** <span class="o">[</span>dmg<span class="o">]</span> Error <span class="m">2</span>
+</pre></div>
+</div>
+<p>This has something to do with symbolic links and the way how <code class="docutils literal notranslate"><span class="pre">hdiutil</span></code>
+handles them. If you get this error, just try to compile the SSR from a
+different location. You can do this by either moving all the source files
+somewhere else, or by doing something like this:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /tmp
+mkdir ssr-bundle
+<span class="nb">cd</span> ssr-bundle
+<span class="nb">export</span> <span class="nv">PKG_CONFIG_PATH</span><span class="o">=</span>/usr/local/lib/pkgconfig
+<span class="nv">$PATH_TO_SSR_SOURCE</span>/configure --enable-app-bundle
+make
+make dmg
+</pre></div>
+</div>
+<p>In this example, <code class="docutils literal notranslate"><span class="pre">$PATH_TO_SSR_SOURCE</span></code> is the directory where you put the
+SSR source files. Instead of <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> you can of course use something else,
+but with <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> it should work on most systems out there.</p>
+<p>If you don’t like this work-around, you may also play around with <code class="docutils literal notranslate"><span class="pre">fsaclctl</span></code>.
+Only <code class="docutils literal notranslate"><span class="pre">WAVE_FORMAT_PCM</span></code> and <code class="docutils literal notranslate"><span class="pre">WAVE_FORMAT_IEEE_FLOAT</span></code> are supported.</p>
+<p>Multi-channel WAV files would normally use the format
+<code class="docutils literal notranslate"><span class="pre">WAVE_FORMAT_EXTENSIBLE</span></code>, see
+<a class="reference external" href="http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html">http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html</a>.</p>
+<p>However, Ecasound doesn’t know this format, that’s why we have to use one of
+the above mentioned formats, although for files with more than 2 channels this
+is not compliant to the WAV standard.</p>
+<p>To check the exact format of your WAV files, you can use sndfile-info (Debian
+package sndfile-programs), and to convert your files, you can use, for
+example, sox (Debian package sox) with the wavpcm option:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sox old.wav new.wavpcm
+mv new.wavpcm new.wav
+</pre></div>
+</div>
+</div>
+<div class="section" id="ssr-crashes-with-a-segmentation-fault-on-max-os-x">
+<h3>SSR crashes with a segmentation fault on Max OS X<a class="headerlink" href="#ssr-crashes-with-a-segmentation-fault-on-max-os-x" title="Permalink to this headline">¶</a></h3>
+<p>If this happens whenever you are opening an audio file or loading a scene that involves opening an audio file, then this might be due to Ecasound. We’ve seen this with the app bundle. Try the following:</p>
+<p>Download the Ecasound source code from <a class="reference external" href="http://nosignal.fi/ecasound/download.php">http://nosignal.fi/ecasound/download.php</a>. <code class="docutils literal notranslate"><span class="pre">Cd</span></code> into the folder and compile Ecasound with:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure
+make
+</pre></div>
+</div>
+<p>Refer also to <a class="reference internal" href="#ecasound"><span class="std std-ref">Ecasound</span></a> for instructions on how to compile Ecasound. The executable <code class="docutils literal notranslate"><span class="pre">ecasound/ecasound</span></code> will be created.</p>
+<p>Finally, replace the Ecasound executable in the SSR bundle with something like this:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo cp ecasound/ecasound /Applications/SoundScapeRenderer-0.4.2-74-gb99f8b2/SoundScapeRenderer.app/Contents/MacOS/
+</pre></div>
+</div>
+<p>You might have to modify the name of the SSR folder in the above command as you’re likely to use a different version.</p>
+</div>
+<div class="section" id="a-file-that-can-t-be-loaded-results-in-a-connection-to-a-live-input">
+<h3>A file that can’t be loaded results in a connection to a live input<a class="headerlink" href="#a-file-that-can-t-be-loaded-results-in-a-connection-to-a-live-input" title="Permalink to this headline">¶</a></h3>
+<p>If there is an error in loading a specified audio file, the corresponding
+source is still created and (unexpectedly) connected to the first soundcard
+input channel.</p>
+<p>We believe this is a bug in the JACK system related to the API function
+jack_connect()_: If the <code class="docutils literal notranslate"><span class="pre">destination_port</span></code> argument is an empty string, the
+function returns (correctly) with an error. However, if the <code class="docutils literal notranslate"><span class="pre">source_port</span></code>
+argument is an empty string, the port is connected to the first “system” port (
+or the first port at all, or who knows …). And this is the case if the SSR
+cannot open a specified audio file.</p>
+<p>If you also think that’s a bug, feel free to report it to the JACK developers.</p>
+</div>
+<div class="section" id="conflicting-jack-and-ecasound-versions">
+<h3>Conflicting JACK and Ecasound versions<a class="headerlink" href="#conflicting-jack-and-ecasound-versions" title="Permalink to this headline">¶</a></h3>
+<p>There is a problem due to a special combination of ecasound and JACK versions
+on 64 bit systems leading to an error (terminating the SSR) similar to this:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span> <span class="o">(</span>ecasoundc_sa<span class="o">)</span> <span class="nv">Error</span><span class="o">=</span><span class="s1">&#39;read() error&#39;</span>, <span class="nv">cmd</span><span class="o">=</span><span class="s1">&#39;cs-connect&#39;</span> <span class="nv">last_error</span><span class="o">=</span><span class="s1">&#39;&#39;</span> <span class="nv">cmd_cnt</span><span class="o">=</span><span class="m">6</span>
+<span class="nv">last_cnt</span><span class="o">=</span><span class="m">5</span>.
+</pre></div>
+</div>
+<p>We experienced this error on 64 bit systems with ecasound version 2.4.6.1 and 2
+.7.0 in combination with JACK version 0.118.0. A similar error occured on Mac
+OS X with ecasound version 2.7.2 and JackOSX version 0.89 (with Jackdmp 1.9.8).</p>
+<p>Please try to update to the newest ecasound and JACK versions.</p>
+</div>
+<div class="section" id="annoying-ecasound-message">
+<h3>Annoying Ecasound message<a class="headerlink" href="#annoying-ecasound-message" title="Permalink to this headline">¶</a></h3>
+<p>You may have seen this message:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>***********************************************************************
+* Message from libecasoundc:
+*
+* <span class="s1">&#39;ECASOUND&#39;</span> environment variable not set. Using the default value
+* value <span class="s1">&#39;ECASOUND=ecasound&#39;</span>.
+***********************************************************************
+</pre></div>
+</div>
+<p>You can totally ignore this, but if it bothers you, you can disable it easily
+by specifying the following line in <code class="docutils literal notranslate"><span class="pre">/etc/bash.bashrc</span></code> (system-wide setting)
+or, if you prefer, you can put it into your <code class="docutils literal notranslate"><span class="pre">$HOME/.bashrc</span></code>
+(just for your user account):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">ECASOUND</span><span class="o">=</span>ecasound
+</pre></div>
+</div>
+</div>
+<div class="section" id="ecasound-cannot-open-a-jack-port">
+<span id="id5"></span><h3>Ecasound cannot open a JACK port<a class="headerlink" href="#ecasound-cannot-open-a-jack-port" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes, when Ecasound is installed via <a class="reference internal" href="#homebrew">Homebrew</a>, it can have trouble finding JACK. As
+a result SSR displays the sound source symbols in the GUI, but they don’t play audio, and
+an according error message is posted in the SSR terminal.</p>
+<p>Type <code class="docutils literal notranslate"><span class="pre">ecasound</span> <span class="pre">-c</span></code> in a terminal to start Ecasound in interactive mode.
+Then type <code class="docutils literal notranslate"><span class="pre">aio-register</span></code> to list all available outputs that Ecasound has recognized. If
+JACK is not listed, then download the Ecasound source code from
+<a class="reference external" href="http://nosignal.fi/ecasound/download.php">http://nosignal.fi/ecasound/download.php</a>, and</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure --enable-jack
+make
+make install
+</pre></div>
+</div>
+<p>The last line might have to be</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo make install
+</pre></div>
+</div>
+<p>Refer also to <a class="reference internal" href="#ecasound"><span class="std std-ref">Ecasound</span></a> for instructions on how to compile Ecasound.</p>
+</div>
+<div class="section" id="using-ssr-on-mac-os-x-el-capitan">
+<h3>Using SSR on Mac OS X El Capitan<a class="headerlink" href="#using-ssr-on-mac-os-x-el-capitan" title="Permalink to this headline">¶</a></h3>
+<p>SSR works well on El Capitan. JACK is what can cause headache. See <a class="reference internal" href="#jack-on-mac-os-x">JACK on Mac OS X</a> .</p>
+</div>
+<div class="section" id="long-paths-to-audio-files-on-mac-os-x">
+<h3>Long paths to audio files on Mac OS X<a class="headerlink" href="#long-paths-to-audio-files-on-mac-os-x" title="Permalink to this headline">¶</a></h3>
+<p>It can happen that SSR displays this error message when loading audio files directily:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>Error: AudioPlayer::Soundfile: ERROR:  Connecting chainsetup failed: <span class="s2">&quot;Enabling chainsetup: AUDIOIO-JACK: Unable to open JACK-client&quot;</span> <span class="o">(</span>audioplayer.cpp:310<span class="o">)</span>
+Warning: AudioPlayer: Initialization of soundfile <span class="s1">&#39;/Users/YOUR_USERNAME/Documents/audio/YOUR_AUDIO_FILE.wav&#39;</span> failed! <span class="o">(</span>audioplayer.cpp:87<span class="o">)</span>
+</pre></div>
+</div>
+<p>Opening such a file would result in a JACK port name that is too long. You can resolve
+this limitation by moving the audio file to a location that produces a shorter (full) path
+name or by wrapping the audio file in an asd-file.</p>
+</div>
+<div class="section" id="segmentation-fault-when-opening-a-scene">
+<h3>Segmentation Fault when Opening a Scene<a class="headerlink" href="#segmentation-fault-when-opening-a-scene" title="Permalink to this headline">¶</a></h3>
+<p>This problem occured on some old SuSE systems.</p>
+<p>When you start the SSR with GUI, everything is alright at first. As soon as
+you open a scene, a segmentation fault arises. This is a problem in the
+interaction between Qt and OpenGL. As a workaround, comment the line</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>renderText<span class="o">(</span><span class="m">0</span>.18f * scale, <span class="m">0</span>.13f * scale, <span class="m">0</span>.0f, source-&gt;name.c_str<span class="o">()</span>, f<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>in the file <code class="docutils literal notranslate"><span class="pre">src/gui/qopenglrenderer.cpp</span></code> and recompile the code. The
+consequence is that the names of the sound sources will not be displayed
+anymore.</p>
+</div>
+<div class="section" id="choppy-sound-on-cheap-on-board-sound-cards">
+<h3>Choppy Sound on Cheap (On-Board) Sound Cards<a class="headerlink" href="#choppy-sound-on-cheap-on-board-sound-cards" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes JACK doesn’t play well with those on-board sound cards. One
+possibility to improve this, is to increase the frames/period setting from the
+default 2 to a more generous 3. This can be done in the Settings dialog of
+qjackctl or with the command line option <code class="docutils literal notranslate"><span class="pre">-n</span></code>:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>jackd -n <span class="m">3</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dylibbundler-doesn-t-grok-qt-frameworks">
+<h3><code class="docutils literal notranslate"><span class="pre">dylibbundler</span></code> doesn’t grok Qt Frameworks<a class="headerlink" href="#dylibbundler-doesn-t-grok-qt-frameworks" title="Permalink to this headline">¶</a></h3>
+<p>If <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">dmg</span></code> doesn’t copy the Qt <code class="docutils literal notranslate"><span class="pre">.dylib</span></code> files into the application
+bundle (to <code class="docutils literal notranslate"><span class="pre">Contents/Libraries</span></code>), you might try the following commands (or
+similar, depending on the exact Qt installation).</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>install_name_tool -id /opt/local/lib/libQtCore.dylib /opt/local/Library/Frameworks/QtCore.framework/QtCore
+install_name_tool -id /opt/local/lib/libQtGui.dylib /opt/local/Library/Frameworks/QtGui.framework/QtGui
+install_name_tool -change /opt/local/Library/Frameworks/QtCore.framework/Versions/5/QtCore /opt/local/lib/libQtCore.dylib /opt/local/Library/Frameworks/QtGui.framework/QtGui
+install_name_tool -id /opt/local/lib/libQtOpenGL.dylib /opt/local/Library/Frameworks/QtOpenGL.framework/QtOpenGL
+install_name_tool -change /opt/local/Library/Frameworks/QtCore.framework/Versions/5/QtCore /opt/local/lib/libQtCore.dylib /opt/local/Library/Frameworks/QtOpenGL.framework/QtOpenGL
+install_name_tool -change /opt/local/Library/Frameworks/QtGui.framework/Versions/5/QtGui /opt/local/lib/libQtGui.dylib /opt/local/Library/Frameworks/QtOpenGL.framework/QtOpenGL
+</pre></div>
+</div>
+<p>You need the appropriate rights to change the library files, so you probably
+need to use <code class="docutils literal notranslate"><span class="pre">sudo</span></code> before the commands.</p>
+<p><em>WARNING</em>: You can totally ruin your Qt installation with this stuff!</p>
+<p>To get some information about a library, you can try something like those:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>otool -L /opt/local/Library/Frameworks/QtOpenGL.framework/QtOpenGL
+otool -l /opt/local/Library/Frameworks/QtOpenGL.framework/QtOpenGL
+otool -D /opt/local/Library/Frameworks/QtOpenGL.framework/QtOpenGL
+</pre></div>
+</div>
+</div>
+<div class="section" id="ssr-for-mac-os-x-qt-menu-nib-not-found">
+<h3>SSR for Mac OS X: qt_menu.nib not found<a class="headerlink" href="#ssr-for-mac-os-x-qt-menu-nib-not-found" title="Permalink to this headline">¶</a></h3>
+<p>This was fixed in MacPorts, see <a class="reference external" href="https://trac.macports.org/ticket/37662">https://trac.macports.org/ticket/37662</a>. Thanks to Chris Pike!
+Since version 0.5 (switching to qt5), qt_menu.nib is not needed any more.</p>
+</div>
+<div class="section" id="compilation-error-on-ubuntu-and-archlinux">
+<h3>Compilation Error on Ubuntu and Archlinux<a class="headerlink" href="#compilation-error-on-ubuntu-and-archlinux" title="Permalink to this headline">¶</a></h3>
+<p>This issue was resolved in version 0.3.4. Some newer distributions got more
+picky about the necessary <code class="docutils literal notranslate"><span class="pre">#include</span></code> commands. If the SSR refuses to
+compile, add this to the file <code class="docutils literal notranslate"><span class="pre">src/gui/qopenglplotter.h</span></code> (somewhere at the
+beginning):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;GL/glu.h&gt;</span>
+</pre></div>
+</div>
+<p>On Mac OS X you’ll need this instead:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;OpenGL/glu.h&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="polhemus-tracker-does-not-work-with-ssr">
+<h3>Polhemus tracker does not work with SSR<a class="headerlink" href="#polhemus-tracker-does-not-work-with-ssr" title="Permalink to this headline">¶</a></h3>
+<p>This issue was resolved in version 0.3.3, where we changed the tracker
+selection. Use <code class="docutils literal notranslate"><span class="pre">--tracker=fastrak</span></code>, <code class="docutils literal notranslate"><span class="pre">--tracker=patriot</span></code> and <code class="docutils literal notranslate"><span class="pre">--tracker=intersense</span></code>,
+respectively. The serial port can be specified with <code class="docutils literal notranslate"><span class="pre">--tracker-port=/dev/</span>
+<span class="pre">ttyUSB0</span></code> (or similar).</p>
+<p>This can happen when both the Intersense tracker as well as the Polhemus
+tracker are compiled and the file <code class="docutils literal notranslate"><span class="pre">isports.ini</span></code> is present. The latter tells
+the Intersense tracker which port to use instead of the standard serial port
+<code class="docutils literal notranslate"><span class="pre">/dev/ttyS0</span></code>. If the <code class="docutils literal notranslate"><span class="pre">isports.ini</span></code> file lists the port to which the
+Polhemus tracker is connected, it can happen that something that we have not
+fully understood goes wrong and the Pohlemus data can not be read. In this
+case you can either rename the file isports.ini or change its content.</p>
+<p>It might be necessary to execute <code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">C</span> <span class="pre">&gt;</span> <span class="pre">/dev/ttyS0</span></code> several times in
+order to make Polhemus Fastrak operational again. Use <code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">-e</span> <span class="pre">&quot;C\r&quot;</span> <span class="pre">&gt;</span> <span class="pre">/dev/ttyS0</span></code> for Polhemus Patriot. You can check with <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">/dev/ttyS0</span></code> if it delivers data.</p>
+</div>
+<div class="section" id="missing-gui-buttons-and-timeline">
+<h3>Missing GUI Buttons and Timeline<a class="headerlink" href="#missing-gui-buttons-and-timeline" title="Permalink to this headline">¶</a></h3>
+<p>This issue was resolved in version 0.3.2, the default setting for <code class="docutils literal notranslate"><span class="pre">--enable-floating-control-panel</span></code> is chosen depending on the installed Qt version.
+As of version 0.5 (switching to qt5), the floating control panel is always enabled.</p>
+<p>Different versions of Qt show different behaviour regarding OpenGL Overlays
+and as a result, the GUI buttons are not shown in newer Qt versions.</p>
+<p>To overcome this limitation, we provide two GUI variants:</p>
+<ul class="simple">
+<li><p>Traditional GUI, can be used up to Qt 4.6.x</p></li>
+<li><p>Floating control panel, which is used with Qt 4.7 and above</p></li>
+</ul>
+<p>The floating control panel is the default setting on Mac OS X, for Linux it
+can be activated with:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure --enable-floating-control-panel
+</pre></div>
+</div>
+</div>
+<div class="section" id="opengl-linker-error">
+<h3>OpenGL Linker Error<a class="headerlink" href="#opengl-linker-error" title="Permalink to this headline">¶</a></h3>
+<p>This issue was resolved in version 0.3.2.</p>
+<p>On some systems, after running make, you’ll get an error mentioning ”
+glSelectBuffer”.</p>
+<p>For now, this is the solution (see also the issue below):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure <span class="nv">LIBS</span><span class="o">=</span>-lGL
+</pre></div>
+</div>
+</div>
+<div class="section" id="ip-interface-isn-t-selected-although-boost-libraries-are-installed">
+<h3>IP interface isn’t selected although boost libraries are installed<a class="headerlink" href="#ip-interface-isn-t-selected-although-boost-libraries-are-installed" title="Permalink to this headline">¶</a></h3>
+<p>This issue was resolved with dropping boost::asio for asio in version 0.5.0.</p>
+<p>For older builds, you might need to add the <code class="docutils literal notranslate"><span class="pre">-lpthread</span></code> flag:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./configure <span class="nv">LIBS</span><span class="o">=</span>-lpthread
+</pre></div>
+</div>
+</div>
+<div class="section" id="second-instance-of-ssr-crashes">
+<h3>Second instance of SSR crashes<a class="headerlink" href="#second-instance-of-ssr-crashes" title="Permalink to this headline">¶</a></h3>
+<p>This happens when two or more instances of the SSR are started with the IP server enabled.
+Start all (or at least all instances higher than 1) with the <code class="docutils literal notranslate"><span class="pre">-I</span></code> flag to disable the
+IP interface.</p>
+</div>
+<div class="section" id="audio-files-with-spaces">
+<h3>Audio files with spaces<a class="headerlink" href="#audio-files-with-spaces" title="Permalink to this headline">¶</a></h3>
+<p>This issue was resolved in version 0.3.2.</p>
+<p>Please do not use audio files with spaces for scenes. Neither the filename nor
+the directory referenced in the scene (asd-file) should contain spaces.</p>
+</div>
+<div class="section" id="error-valueerror-unknown-locale-utf-8-when-building-the-manual">
+<h3>Error <code class="docutils literal notranslate"><span class="pre">ValueError:</span> <span class="pre">unknown</span> <span class="pre">locale:</span> <span class="pre">UTF-8</span></code> when building the manual<a class="headerlink" href="#error-valueerror-unknown-locale-utf-8-when-building-the-manual" title="Permalink to this headline">¶</a></h3>
+<p>This can happen on non-US Macs. Go to your home folder <code class="docutils literal notranslate"><span class="pre">/Users/YOUR_USER_NAME</span></code>, open (or
+create) the file <code class="docutils literal notranslate"><span class="pre">.bash_profile</span></code> and add the following to this file:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">LC_ALL</span><span class="o">=</span>en_US.UFT-8
+<span class="nb">export</span> <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+<span class="nb">export</span> <span class="nv">LANGUAGE</span><span class="o">=</span>en_US.UTF-8
+<span class="nb">export</span> <span class="nv">LC_CTYPE</span><span class="o">=</span>en_US.UTF-8
+</pre></div>
+</div>
+<p>You might have to re-open the terminal or log out and in again to see the effect.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="renderers.html" class="btn btn-neutral float-right" title="The Renderers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="general.html" class="btn btn-neutral float-left" title="General" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, SSR Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

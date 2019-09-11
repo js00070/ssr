@@ -1,5 +1,7 @@
 // Example showing how to connect JACK ports.
 
+#include <unistd.h>
+
 #include "apf/mimoprocessor.h"
 #include "apf/jack_policy.h"
 
