@@ -21,4 +21,4 @@ apf/examples/portaudio_simpleprocessor
 apf/examples/jack_query_thread
 apf/examples/jack_minimal
 .vscode
-doc
+doc/manual/_build/
