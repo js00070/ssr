@@ -9,6 +9,7 @@ sudo apt install libsndfile1-dev
 sudo apt install libjack-jackd2-dev
 sudo apt install libfftw3-dev
 sudo apt install portaudio19-dev
+sudo apt install jackd
 ```
 为了编译doc文档,需要安装如下依赖
 ```bash
@@ -60,3 +61,22 @@ get()方法和()操作符可以得到_current的引用
 old()方法可以的领导_old的引用
 
 官方页面: https://audioprocessingframework.github.io/classapf_1_1BlockParameter.html
+
+### apf/apf/commandqueue.h
+#### class CommandQueue
+从非实时线程往实时线程发送命令信息,具体见论文4.2节
+
+官方页面: https://audioprocessingframework.github.io/classapf_1_1CommandQueue.html
+
+### apf/apf/lockfreefifo.h
+#### class LockFreeFifo<T*>
+线程安全的队列(单读者单写者),具体见论文4.1节
+
+官方页面: https://audioprocessingframework.github.io/classapf_1_1LockFreeFifo_3_01T_01_5_01_4.html
+
+### apf/apf/rtlist.h
+#### class RtList<T*>
+
+一个RtList<T*>实例中包含一个用来实际存放元素的_the_actual_list(使用的是std::list),以及用来缓存对_the_actual_list进行操作的各种指令的CommandQueue _fifo, 常见的对list进行的操作都在内部实现了相应的CommandQueue::Command的子类
+
+官方页面: https://audioprocessingframework.github.io/classapf_1_1RtList_3_01T_01_5_01_4.html
