@@ -77,6 +77,22 @@ old()方法可以的领导_old的引用
 ### apf/apf/rtlist.h
 #### class RtList<T*>
 
-一个RtList<T*>实例中包含一个用来实际存放元素的_the_actual_list(使用的是std::list),以及用来缓存对_the_actual_list进行操作的各种指令的CommandQueue _fifo, 常见的对list进行的操作都在内部实现了相应的CommandQueue::Command的子类
+一个RtList<T*>实例中包含一个用来实际存放元素的_the_actual_list(使用的是std::list),以及一个用来缓存对_the_actual_list进行操作的各种指令的CommandQueue _fifo, 常见的对list进行的操作都在内部实现了相应的CommandQueue::Command的子类(AddCommand, RemCommand, ClearCommand). RtList 没有锁, 若要多线程同时对RtList进行操作, 需要手动加mutex
 
 官方页面: https://audioprocessingframework.github.io/classapf_1_1RtList_3_01T_01_5_01_4.html
+
+### class MimoProcessor
+MimoProcessor<Derived, interface_policy, thread_policy, query_policy>
+
+由于这个类过于复杂, 我先看MimoProcessor内部定义的类
+
+ScopedLock: 接收thread_policy里定义的Lock, ScopedLock实例的生命周期开始时锁住, 结束时释放锁
+
+CleanupFunction:　接收CommandQueue fifo, 括号运算符执行cleanup_commands
+
+QueryThread: 继承了thread_policy里的ScopedThread<CleanupFunction>, 这个ScopedThread接收的是CommandQueue&和thread_policy里定义的usleeptime. QueryThread是在MimoProcessor的成员函数make_query_thread中初始化的, 初始化了一个unique_ptr<QueryThread>
+
+QueryCommand: 继承了CommandQueue::Command, 疑问: Derived& _parent是干啥的? cleanup函数里的F.update和_parent.new_query是干啥的?
+
+
+
