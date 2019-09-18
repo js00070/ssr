@@ -66,6 +66,14 @@ old()方法可以的领导_old的引用
 #### class CommandQueue
 从非实时线程往实时线程发送命令信息,具体见论文4.2节
 
+内部有两个LockFreeFifo<Command*>, 分别是_in_fifo和_out_fifo, _in_fifo里存着实时线程中要执行的Command, _out_fifo里存着已经执行过的Command的引用, 等待着在非实时线程中释放这些Command的内存
+
+成员函数process_commands的流程就是, 从_in_fifo里取出Command, 执行Command的execute虚函数, 然后把这个Command指针加入到_out_fifo中
+
+成员函数cleanup_commands就是把_out_fifo中的Command都释放
+
+成员函数deactivate和reactivate就是在操作内部的_active: bool 变量, 前者是cleanup之后令_active为false, 后者是cleanup之后令_active为true, 具体这么做是为啥, 意义不明
+
 官方页面: https://audioprocessingframework.github.io/classapf_1_1CommandQueue.html
 
 ### apf/apf/lockfreefifo.h
@@ -92,7 +100,15 @@ CleanupFunction:　接收CommandQueue fifo, 括号运算符执行cleanup_command
 
 QueryThread: 继承了thread_policy里的ScopedThread<CleanupFunction>, 这个ScopedThread接收的是CommandQueue&和thread_policy里定义的usleeptime. QueryThread是在MimoProcessor的成员函数make_query_thread中初始化的, 初始化了一个unique_ptr<QueryThread>
 
-QueryCommand: 继承了CommandQueue::Command, 疑问: Derived& _parent是干啥的? cleanup函数里的F.update和_parent.new_query是干啥的?
+QueryCommand: 继承了CommandQueue::Command, 疑问: Derived& _parent是干啥的? cleanup函数里的F.update和_parent.new_query是干啥的? QueryCommand的功能是啥?
+
+成员函数activate与deactivate的作用, 迷
+
+成员函数add, 迷
+
+MimoProcessor的构造函数
+
+
 
 
 
