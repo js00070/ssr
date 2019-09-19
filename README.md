@@ -42,6 +42,8 @@ make
 #### class CRTP<Derived>
 奇异递归模板模式(Curiously Recurring Template Pattern), 参考https://zhuanlan.zhihu.com/p/54945314
 
+CRTP的好处是不用调用虚函数也能实现多态, 省去了虚函数开销
+
 成员函数Derived& derived(), 顾名思义, 相当于是返回子类的this
 
 官方页面: https://audioprocessingframework.github.io/classapf_1_1CRTP.html
@@ -92,7 +94,15 @@ old()方法可以的领导_old的引用
 ### class MimoProcessor
 MimoProcessor<Derived, interface_policy, thread_policy, query_policy>
 
-由于这个类过于复杂, 我先看MimoProcessor内部定义的类
+关于policy-based designed, 参考https://www.cnblogs.com/mthoutai/p/6871667.html
+
+由于这个类过于复杂, 先看MimoProcessor内部定义的类
+
+ProcessItem: 参考dummy_example.cpp的第13行开始的使用例子. 继承了ProcessItem<X>的类X的实例是放入RtList的元素
+
+宏APF_PROCESS(A, B)相当于是定义一个process类(继承了B::Process), 构造函数相当于是执行A的成员函数APF_PROCESS_internal, 函数内容由用户编写
+
+待解决: Input, Output以及自定义的IntermediateThing的Process, 执行的先后顺序是怎样的?
 
 ScopedLock: 接收thread_policy里定义的Lock, ScopedLock实例的生命周期开始时锁住, 结束时释放锁
 
@@ -108,7 +118,24 @@ QueryCommand: 继承了CommandQueue::Command, 疑问: Derived& _parent是干啥�
 
 MimoProcessor的构造函数
 
+### simpleprocessor.h
 
+31行, 注释里说input buffer和output buffer的地址是复用的, 避免了多余的拷贝
 
+### dummy_example.cpp
 
+APF_PROCESS展开后的写法
 
+```cpp
+// APF_PROCESS(MyIntermediateThing, ProcessItem<MyIntermediateThing>)
+        // 展开的写法:
+        struct Process : ProcessItem<MyIntermediateThing>::Process {
+          explicit Process(MyIntermediateThing& ctor_arg) : ProcessItem<MyIntermediateThing>::Process(ctor_arg) {
+            ctor_arg.APF_PROCESS_internal();
+          } 
+        };
+        void APF_PROCESS_internal()
+        {
+          // do your processing here!
+        }
+```

@@ -17,7 +17,19 @@ class MyProcessor : public apf::MimoProcessor<MyProcessor
         // Process class publicly derived from ProcessItem<YourClass>::Process.
 
         // This can be facilitated with this macro call:
-        APF_PROCESS(MyIntermediateThing, ProcessItem<MyIntermediateThing>)
+        // APF_PROCESS(MyIntermediateThing, ProcessItem<MyIntermediateThing>)
+        // {
+        //   // do your processing here!
+        // }
+
+        // APF_PROCESS(MyIntermediateThing, ProcessItem<MyIntermediateThing>)
+        // 展开的写法:
+        struct Process : ProcessItem<MyIntermediateThing>::Process {
+          explicit Process(MyIntermediateThing& ctor_arg) : ProcessItem<MyIntermediateThing>::Process(ctor_arg) {
+            ctor_arg.APF_PROCESS_internal();
+          } 
+        };
+        void APF_PROCESS_internal()
         {
           // do your processing here!
         }
