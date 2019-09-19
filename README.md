@@ -122,6 +122,10 @@ MimoProcessor的构造函数
 
 31行, 注释里说input buffer和output buffer的地址是复用的, 避免了多余的拷贝
 
+构造函数, 接收一个parameter_map, 确定输入通道数和输出通道数, 调用add成员函数添加通道(通道编号)
+
+待解决: 音频后端, jack/portaudio/audiofile如何使用(文件格式)?
+
 ### dummy_example.cpp
 
 APF_PROCESS展开后的写法
