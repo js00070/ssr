@@ -102,8 +102,6 @@ ProcessItem: 参考dummy_example.cpp的第13行开始的使用例子. 继承了P
 
 宏APF_PROCESS(A, B)相当于是定义一个process类(继承了B::Process), 构造函数相当于是执行A的成员函数APF_PROCESS_internal, 函数内容由用户编写
 
-待解决: Input, Output以及自定义的IntermediateThing的Process, 执行的先后顺序是怎样的?
-
 ScopedLock: 接收thread_policy里定义的Lock, ScopedLock实例的生命周期开始时锁住, 结束时释放锁
 
 CleanupFunction:　接收CommandQueue fifo, 括号运算符执行cleanup_commands
@@ -114,9 +112,28 @@ QueryCommand: 继承了CommandQueue::Command, 疑问: Derived& _parent是干啥�
 
 成员函数activate与deactivate的作用, 迷
 
-成员函数add, 迷
+成员函数add, 添加input/output通道
 
 MimoProcessor的构造函数
+
+MimoProcessor的成员函数_process_list, 参数是一个RtList, 顾名思义, 就是对RtList进行处理, 将RtList地址赋值给MimoProcessor的成员变量_current_list之后, 内部调用了_process_current_list_in_main_thread()这个函数, 
+
+在_process_current_list_in_main_thread函数中, 先唤醒了_thread_data里的所有线程, 然后调用_process_selected_items_in_current_list(0), 0是主线程的线程号, 之后等待线程完成,
+
+在_process_selected_items_in_current_list函数中, 会执行之前的那个RtList里每一个item的process()方法
+
+另外, _process_selected_items_in_current_list函数还在WorkThreadFunction类的()操作符中使用, 实际上就是在对应的WorkerThread中执行process
+
+MimoProcessor::Xput 是Input和OutPut的共同基类, 为了代码复用
+
+### pointer_policy.h
+
+MimoProcessor的第二个模版参数interface_policy就是pointer_policy类型的, MimoProcessor里的Input/Output不仅继承了Xput, 还继承了interface_policy里的Input/Output类, MimoProcessor::Input/Output的process()里执行了interface_policy里的fetch_buffer()函数
+
+另外很重要的是, pointer_policy::Input/Output中包括了buffer_type buffer成员, simpleprocessor.h中的Input::APF_PROCESS里用的buffer就是这里的buffer
+
+### combine_channels.h
+似乎是和通道间结合处理相关的代码
 
 ### simpleprocessor.h
 
@@ -124,7 +141,9 @@ MimoProcessor的构造函数
 
 构造函数, 接收一个parameter_map, 确定输入通道数和输出通道数, 调用add成员函数添加通道(通道编号)
 
-待解决: 音频后端, jack/portaudio/audiofile如何使用(文件格式)?
+SimpleProcessor::Input::APF_PROCESS 实际上是把interface_policy::Input里的buffer拷贝到自己的_buffer里
+
+
 
 ### dummy_example.cpp
 
