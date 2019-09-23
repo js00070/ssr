@@ -74,7 +74,7 @@ old()方法可以的领导_old的引用
 
 成员函数cleanup_commands就是把_out_fifo中的Command都释放
 
-成员函数deactivate和reactivate就是在操作内部的_active: bool 变量, 前者是cleanup之后令_active为false, 后者是cleanup之后令_active为true, 具体这么做是为啥, 意义不明
+成员函数deactivate和reactivate就是在操作内部的_active: bool 变量, 前者是cleanup之后令_active为false, 后者是cleanup之后令_active为true, **至于这么做是为啥, 意义不明**
 
 官方页面: https://audioprocessingframework.github.io/classapf_1_1CommandQueue.html
 
@@ -110,9 +110,9 @@ QueryThread: 继承了thread_policy里的ScopedThread<CleanupFunction>, 这个Sc
 
 QueryCommand: 继承了CommandQueue::Command, 疑问: Derived& _parent是干啥的? cleanup函数里的F.update和_parent.new_query是干啥的? QueryCommand的功能是啥?
 
-成员函数activate与deactivate的作用, 迷
+**成员函数activate与deactivate的作用, 意义不明**
 
-成员函数add, 添加input/output通道
+**成员函数add, 添加input/output通道, 或许还和process的执行顺序相关(见dummy_example.cpp的Myprocessor构造函数), 待研究**
 
 MimoProcessor的构造函数
 
@@ -126,11 +126,26 @@ MimoProcessor的成员函数_process_list, 参数是一个RtList, 顾名思义, 
 
 MimoProcessor::Xput 是Input和OutPut的共同基类, 为了代码复用
 
+MimoProcessor的虚函数process(), 
+
+WorkerThread类
+
+WorkerThreadFunction类: 内部存有线程号, 以及WorkerThread和MimoProcessor的引用, ()操作符执行的代码有点迷, **主线程和worker线程之间的交互是如何进行的?**
+
+
+
+**疑问: WorkThread类和WorkThreadFunction实例都是在哪儿初始化的?**
+
+MimoProcessor的构造函数里, 调用了thread_policy::default_number_of_threads(), 在这里获得了系统的线程数, 然后初始化了_thread_data, 线程是在这里初始化的.
+
+
 ### pointer_policy.h
 
 MimoProcessor的第二个模版参数interface_policy就是pointer_policy类型的, MimoProcessor里的Input/Output不仅继承了Xput, 还继承了interface_policy里的Input/Output类, MimoProcessor::Input/Output的process()里执行了interface_policy里的fetch_buffer()函数
 
 另外很重要的是, pointer_policy::Input/Output中包括了buffer_type buffer成员, simpleprocessor.h中的Input::APF_PROCESS里用的buffer就是这里的buffer
+
+pointer_policy::audio_callback 似乎就是音频处理流程的入口, 里面调用了process()虚函数, 实际使用时会执行MimoProcessor里的process()虚函数
 
 ### combine_channels.h
 似乎是和通道间结合处理相关的代码
@@ -143,7 +158,7 @@ MimoProcessor的第二个模版参数interface_policy就是pointer_policy类型�
 
 SimpleProcessor::Input::APF_PROCESS 实际上是把interface_policy::Input里的buffer拷贝到自己的_buffer里
 
-
+**SimpleProcessor里使用到的CombineChannels类待研究**
 
 ### dummy_example.cpp
 
@@ -162,3 +177,21 @@ APF_PROCESS展开后的写法
           // do your processing here!
         }
 ```
+
+### jack_convolver.cpp
+
+**疑问: 为何Output没有APF_PROCESS?**
+
+MyProcessor类的成员变量里除了Input和Output外还多了两种类型, apf::conv::Filter和apf::conv::Convolver
+
+## 流程概括
+
+目前的解读: 对于每一个音频block, 处理的入口是pointer_policy类里audio_callback(或是其他policy里定义的其他callback))函数, block处理的流程是这样的: 
+
+- callback函数入口(接收能够标识出block数据的参数) -->
+- 执行MimoProcessor::process(), 内部控制了各个stage的process的顺序:
+  - 先执行_process_list(_input_list)
+  - 后执行Derived::Process(this->derived())构造函数, 也就是自定的Derived类里的APF_PROCESS宏
+  - 再执行_process_list(_output_list)
+
+**疑问:如果像SimpleProcessor那样, 没有定义APF_PROCESS的话,Derived::Process(this->derived())构造函数是运行的什么?**
