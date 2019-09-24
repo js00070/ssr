@@ -108,13 +108,13 @@ CleanupFunction:　接收CommandQueue fifo, 括号运算符执行cleanup_command
 
 QueryThread: 继承了thread_policy里的ScopedThread<CleanupFunction>, 这个ScopedThread接收的是CommandQueue&和thread_policy里定义的usleeptime. QueryThread是在MimoProcessor的成员函数make_query_thread中初始化的, 初始化了一个unique_ptr<QueryThread>
 
-QueryCommand: 继承了CommandQueue::Command, 疑问: Derived& _parent是干啥的? cleanup函数里的F.update和_parent.new_query是干啥的? QueryCommand的功能是啥?
+QueryCommand: 继承了CommandQueue::Command, **疑问: cleanup函数里的F.update和_parent.new_query是干啥的? QueryCommand的功能是啥?**
 
 **成员函数activate与deactivate的作用, 意义不明**
 
-**成员函数add, 添加input/output通道, 或许还和process的执行顺序相关(见dummy_example.cpp的Myprocessor构造函数), 待研究**
+成员函数add, 添加input/output通道
 
-MimoProcessor的构造函数
+MimoProcessor的构造函数: 初始化各种资源, 初始化WorkerThread
 
 MimoProcessor的成员函数_process_list, 参数是一个RtList, 顾名思义, 就是对RtList进行处理, 将RtList地址赋值给MimoProcessor的成员变量_current_list之后, 内部调用了_process_current_list_in_main_thread()这个函数, 
 
@@ -126,18 +126,18 @@ MimoProcessor的成员函数_process_list, 参数是一个RtList, 顾名思义, 
 
 MimoProcessor::Xput 是Input和OutPut的共同基类, 为了代码复用
 
-MimoProcessor的虚函数process(), 
+MimoProcessor的虚函数process(),
 
-WorkerThread类
+WorkerThread类, 实例存放在MimoProcessor里的fixed_vector<WorkThread>中, **疑问: 构造函数中的semaphore初始化的过程是怎样的?**
 
-WorkerThreadFunction类: 内部存有线程号, 以及WorkerThread和MimoProcessor的引用, ()操作符执行的代码有点迷, **主线程和worker线程之间的交互是如何进行的?**
+WorkerThread的构造函数中不仅初始化了semaphore, 还初始化了线程的基本信息, 包括线程号以及线程所执行的代码ThreadFunction
 
+WorkerThreadFunction类: 内部存有线程号, 以及WorkerThread和MimoProcessor的引用, ()操作符执行的代码就是实时线程的主体代码了, **疑问: 主线程和worker线程之间的交互是如何进行的?**
 
+目前的解读: WorkerThreadFunction里的()运算符是实时线程运行的代码主体, 里面先用semaphore阻塞, 等待主线程信号, 接收到主线程的信号之后, 就执行处理任务(利用线程号来对_current_list里的任务进行分割, 实现并行的效果), 处理完毕之后向主线程发送信号.
 
-**疑问: WorkThread类和WorkThreadFunction实例都是在哪儿初始化的?**
-
-MimoProcessor的构造函数里, 调用了thread_policy::default_number_of_threads(), 在这里获得了系统的线程数, 然后初始化了_thread_data, 线程是在这里初始化的.
-
+**疑问:执行完了这个stage之后如何重启worker线程?**
+解读: 这里的使用的并不是std::thread, 而是他自己在thread_policy里实现的DetachedThread, 在cxx_thread_policy里实现的是不断地循环执行线程的_function
 
 ### pointer_policy.h
 
@@ -146,6 +146,11 @@ MimoProcessor的第二个模版参数interface_policy就是pointer_policy类型�
 另外很重要的是, pointer_policy::Input/Output中包括了buffer_type buffer成员, simpleprocessor.h中的Input::APF_PROCESS里用的buffer就是这里的buffer
 
 pointer_policy::audio_callback 似乎就是音频处理流程的入口, 里面调用了process()虚函数, 实际使用时会执行MimoProcessor里的process()虚函数
+
+### cxx_thread_policy.h
+线程控制相关的代码
+
+关于std::condition_variable, 参考https://en.cppreference.com/w/cpp/thread/condition_variable
 
 ### combine_channels.h
 似乎是和通道间结合处理相关的代码
@@ -184,14 +189,18 @@ APF_PROCESS展开后的写法
 
 MyProcessor类的成员变量里除了Input和Output外还多了两种类型, apf::conv::Filter和apf::conv::Convolver
 
+### mimoprocessor_file_io.h
+里面就是一个模版函数int mimoprocessor_file_io(...), 参数接收一个Processor引用和输入输出文件名, 内部调用Sndfile接口, 把音频文件分成了很多block并依次调用audio_callback函数进行处理
+
+
 ## 流程概括
 
-目前的解读: 对于每一个音频block, 处理的入口是pointer_policy类里audio_callback(或是其他policy里定义的其他callback))函数, block处理的流程是这样的: 
+对于每一个音频block, 处理的入口是pointer_policy类里audio_callback(或是其他policy里定义的其他callback))函数, block处理的流程是这样的: 
 
 - callback函数入口(接收能够标识出block数据的参数) -->
 - 执行MimoProcessor::process(), 内部控制了各个stage的process的顺序:
-  - 先执行_process_list(_input_list)
-  - 后执行Derived::Process(this->derived())构造函数, 也就是自定的Derived类里的APF_PROCESS宏
-  - 再执行_process_list(_output_list)
+  - 执行_process_list(_input_list) -->
+  - 执行Derived::Process(this->derived())构造函数, 也就是自定的Derived类里的APF_PROCESS宏 -->
+  - 执行_process_list(_output_list)
 
 **疑问:如果像SimpleProcessor那样, 没有定义APF_PROCESS的话,Derived::Process(this->derived())构造函数是运行的什么?**
