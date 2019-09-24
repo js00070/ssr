@@ -152,9 +152,6 @@ pointer_policy::audio_callback 似乎就是音频处理流程的入口, 里面�
 
 关于std::condition_variable, 参考https://en.cppreference.com/w/cpp/thread/condition_variable
 
-### combine_channels.h
-似乎是和通道间结合处理相关的代码
-
 ### simpleprocessor.h
 
 31行, 注释里说input buffer和output buffer的地址是复用的, 避免了多余的拷贝
@@ -163,7 +160,25 @@ pointer_policy::audio_callback 似乎就是音频处理流程的入口, 里面�
 
 SimpleProcessor::Input::APF_PROCESS 实际上是把interface_policy::Input里的buffer拷贝到自己的_buffer里
 
-**SimpleProcessor里使用到的CombineChannels类待研究**
+**SimpleProcessor::Output里的成员CombineChannels<rtlist_proxy<Input>, Output>的作用待研究**
+
+### combine_channels.h
+似乎是和通道间结合处理相关的代码
+
+#### class CombineChannelsBase<typename Derived, typename ListProxy, typename Out>
+
+ListProxy相当于输入列表类型, Out是输出列表类型, 类的成员变量有ListProxy _in, Out& _out,CombineChannelsResult::type _selection和bool _accumulate
+
+核心逻辑部分process(F f)函数, 传入的是一个用户自定义的包含()运算符以及select(item)成员函数的类实例(在SimpleProcessor的例子里, 是SimpleProcessor::Output里的simple_predicate这个类), select函数的参数是输入列表的item
+
+CombineChannelsBase::process(f)里的流程是这样的:
+- 执行Derived里的before_the_loop(), 意义不明
+- 循环遍历_in, 通过f.select(item)的返回值(返回值类型是apf::CombineChannelsResult中定义的常量), 选择执行Derived的cast_one或是cast_two, 这两个cast是CombineChannels里实现的
+- 执行Derived的after_the_loop, 意义不明
+
+概括: select函数是选择想要交互处理的通道以及处理的类型, ()运算符是对该通道里数据进行的操作, 如SimpleProcessor里的simple_predicate, 就是直接选择了所有输入通道, 然后将每个通道的强度除以通道数, **最后再加到output里??**
+
+**疑问: bool _accumulate的作用是啥?**
 
 ### dummy_example.cpp
 

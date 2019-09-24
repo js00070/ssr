@@ -1,7 +1,0 @@
-jack_simpleprocessor .dep/jack_simpleprocessor.dep: \
- jack_simpleprocessor.cpp ../apf/stringtools.h ../apf/jack_policy.h \
- ../apf/jackclient.h ../apf/parameter_map.h ../apf/stringtools.h \
- ../apf/iterator.h ../apf/math.h ../apf/cxx_thread_policy.h ../apf/misc.h \
- simpleprocessor.h ../apf/mimoprocessor.h ../apf/rtlist.h \
- ../apf/commandqueue.h ../apf/lockfreefifo.h ../apf/container.h \
- ../apf/combine_channels.h

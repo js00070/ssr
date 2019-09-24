@@ -1,7 +1,0 @@
-audiofile_simpleprocessor .dep/audiofile_simpleprocessor.dep: \
- audiofile_simpleprocessor.cpp ../apf/mimoprocessor_file_io.h \
- ../apf/stopwatch.h ../apf/container.h ../apf/iterator.h ../apf/math.h \
- ../apf/pointer_policy.h ../apf/parameter_map.h ../apf/stringtools.h \
- ../apf/cxx_thread_policy.h ../apf/misc.h simpleprocessor.h \
- ../apf/mimoprocessor.h ../apf/rtlist.h ../apf/commandqueue.h \
- ../apf/lockfreefifo.h ../apf/combine_channels.h ../apf/stringtools.h

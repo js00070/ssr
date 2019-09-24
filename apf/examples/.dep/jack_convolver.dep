@@ -1,7 +1,0 @@
-jack_convolver .dep/jack_convolver.dep: jack_convolver.cpp \
- ../apf/mimoprocessor.h ../apf/rtlist.h ../apf/commandqueue.h \
- ../apf/lockfreefifo.h ../apf/math.h ../apf/misc.h ../apf/container.h \
- ../apf/iterator.h ../apf/parameter_map.h ../apf/stringtools.h \
- ../apf/jack_policy.h ../apf/jackclient.h ../apf/stringtools.h \
- ../apf/cxx_thread_policy.h ../apf/shareddata.h ../apf/convolver.h \
- ../apf/fftwtools.h
