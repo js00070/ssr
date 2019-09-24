@@ -201,6 +201,7 @@ MyProcessor类的成员变量里除了Input和Output外还多了两种类型, ap
 - 执行MimoProcessor::process(), 内部控制了各个stage的process的顺序:
   - 执行_process_list(_input_list) -->
   - 执行Derived::Process(this->derived())构造函数, 也就是自定的Derived类里的APF_PROCESS宏 -->
-  - 执行_process_list(_output_list)
+  - 执行_process_list(_output_list) -->
+  - 执行
 
 **疑问:如果像SimpleProcessor那样, 没有定义APF_PROCESS的话,Derived::Process(this->derived())构造函数是运行的什么?**
