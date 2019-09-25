@@ -104,13 +104,8 @@ ProcessItem: 参考dummy_example.cpp的第13行开始的使用例子. 继承了P
 
 ScopedLock: 接收thread_policy里定义的Lock, ScopedLock实例的生命周期开始时锁住, 结束时释放锁
 
-CleanupFunction:　接收CommandQueue fifo, 括号运算符执行cleanup_commands
-
-QueryThread: 继承了thread_policy里的ScopedThread<CleanupFunction>, 这个ScopedThread接收的是CommandQueue&和thread_policy里定义的usleeptime. QueryThread是在MimoProcessor的成员函数make_query_thread中初始化的, 初始化了一个unique_ptr<QueryThread>
-
-QueryCommand: 继承了CommandQueue::Command, **疑问: cleanup函数里的F.update和_parent.new_query是干啥的? QueryCommand的功能是啥?**
-
 **成员函数activate与deactivate的作用, 意义不明**
+猜测: 在更加复杂的例子中会有实际的作用(初始化资源/销毁资源之类的)
 
 成员函数add, 添加input/output通道
 
@@ -160,8 +155,6 @@ pointer_policy::audio_callback 似乎就是音频处理流程的入口, 里面�
 
 SimpleProcessor::Input::APF_PROCESS 实际上是把interface_policy::Input里的buffer拷贝到自己的_buffer里
 
-**SimpleProcessor::Output里的成员CombineChannels<rtlist_proxy<Input>, Output>的作用待研究**
-
 ### combine_channels.h
 似乎是和通道间结合处理相关的代码
 
@@ -173,12 +166,13 @@ ListProxy相当于输入列表类型, Out是输出列表类型, 类的成员变�
 
 CombineChannelsBase::process(f)里的流程是这样的:
 - 执行Derived里的before_the_loop(), 意义不明
-- 循环遍历_in, 通过f.select(item)的返回值(返回值类型是apf::CombineChannelsResult中定义的常量), 选择执行Derived的cast_one或是cast_two, 这两个cast是CombineChannels里实现的
+- 循环遍历_in, 通过f.select(item)的返回值(返回值类型是apf::CombineChannelsResult中定义的常量), 选择执行Derived的case_one或是case_two, 这两个case是CombineChannels里实现的
 - 执行Derived的after_the_loop, 意义不明
 
 概括: select函数是选择想要交互处理的通道以及处理的类型, ()运算符是对该通道里数据进行的操作, 如SimpleProcessor里的simple_predicate, 就是直接选择了所有输入通道, 然后将每个通道的强度除以通道数, **最后再加到output里??**
 
 **疑问: bool _accumulate的作用是啥?**
+推测: 用于标识是在_out上执行"+="还是"="
 
 ### dummy_example.cpp
 
@@ -208,15 +202,32 @@ MyProcessor类的成员变量里除了Input和Output外还多了两种类型, ap
 里面就是一个模版函数int mimoprocessor_file_io(...), 参数接收一个Processor引用和输入输出文件名, 内部调用Sndfile接口, 把音频文件分成了很多block并依次调用audio_callback函数进行处理
 
 
-## 流程概括
+## SimpleProcessor流程概括
+
+首先, 先初始化一个processor实例, 在初始化这个实例的同时, 同时会初始化若干个worker线程(线程数量和CPU相关), 和主线程一起来实现并行计算, 线程一开始都是阻塞住的, 等待主线程给它们发送信号后才会开始工作
+
+然后, 进入mimoprocessor_file_io部分(如果是jack后端, 则是其他类似的流程), 相关资源初始化完毕后, 开始实际的音频处理流程, 把音频分成了很多block, 对每一段block进行处理
 
 对于每一个音频block, 处理的入口是pointer_policy类里audio_callback(或是其他policy里定义的其他callback))函数, block处理的流程是这样的: 
 
-- callback函数入口(接收能够标识出block数据的参数) -->
+- callback函数入口(接收能够标识出block数据的参数)
 - 执行MimoProcessor::process(), 内部控制了各个stage的process的顺序:
-  - 执行_process_list(_input_list) -->
-  - 执行Derived::Process(this->derived())构造函数, 也就是自定的Derived类里的APF_PROCESS宏 -->
-  - 执行_process_list(_output_list) -->
-  - 执行
+  - 执行_fifo.process_commands(), 执行非实时线程发来的命令(暂存在CommandQueue _fifo里), 由于在SimpleProcessor这个例子里禁用了queries, 所以不存在
+  - 执行_process_list(_input_list), _input_list里的一个元素就代表一个输入通道,
+    - 在这个函数里面让所有线程一起并行执行了Input类的process虚函数, 在虚函数里, 先是执行了fetch_buffer虚函数(从pointer_policy::Input继承来的), 然后执行了Input类里本身的Process(也就是APF_PROCESS的内容)
+    - fetch_buffer的作用是把音频数据放到this->buffer里(并没有内存拷贝, 只是指针操作),
+    - APF_PROCESS里读取this->buffer获得输入数据, 并做任何想做的事情, SimpleProcessor只是把buffer拷贝到了_buffer里
+  - 执行Derived::Process(this->derived())构造函数, 也就是自定的Derived类里的APF_PROCESS宏, 在SimpleProcessor例子中, 使用的是默认的Process类, 什么都没干
+  - 执行_process_list(_output_list), 与Input类似, 执行Output的process():
+    - 先是fetch_buffer, 获得输出buffer地址, APF_PROCESS中只要往this->buffer里写输出数据即可
+    - 然后是SimpleProcessor的APF_PROCESS, 使用了CombineChannels<...>类型的_combiner来选择性地对接input各通道的数据到output的一个通道里, 具体的过程是这样的:
+      - 计算了weight, 值是1.0/(输入通道数)
+      - 执行_combiner.process(simple_predicate(weight))解释如下: 
+        - 这个simple_predicate是自己定义的一个类型, 里面实现了一个select(Input&)函数和operator()(float in), 构造函数的参数是自己指定的, 在这个例子里就是weight.
+        - 把这样一个simple_predicate实例传入了_combiner.process里, 这个process里实际上就是通过传入的select函数来决定选择哪个input通道, 然后把选定的input通道的数据传入operator()(float in), 得到的返回值就是想要加到output通道里的值
+      - 最终的效果就是, 把各个输入通道的数据除以了输入通道数, 最后汇总累加到了输出通道里, 实现了各个通道强度平均化的效果
+  - 执行process_query_commands
+    - 如果query_policy选择了enable_queries的话, 会运行一些非实时线程向实时线程发送指令相关的逻辑, 具体见class enable_queries. 
+    - 概括一下主要行为就是: enable_queries实例里存了一个不断轮询的线程(非实时线程), 每隔usleeptime时间就会执行一次query_function, 线程实现见threadtools里的ScopedThread类
+  
 
-**疑问:如果像SimpleProcessor那样, 没有定义APF_PROCESS的话,Derived::Process(this->derived())构造函数是运行的什么?**
