@@ -228,6 +228,13 @@ MyProcessor类的成员变量里除了Input和Output外还多了两种类型, ap
       - 最终的效果就是, 把各个输入通道的数据除以了输入通道数, 最后汇总累加到了输出通道里, 实现了各个通道强度平均化的效果
   - 执行process_query_commands
     - 如果query_policy选择了enable_queries的话, 会运行一些非实时线程向实时线程发送指令相关的逻辑, 具体见class enable_queries. 
-    - 概括一下主要行为就是: enable_queries实例里存了一个不断轮询的线程(非实时线程), 每隔usleeptime时间就会执行一次query_function, 线程实现见threadtools里的ScopedThread类
-  
+    - 概括一下主要行为就是: enable_queries实例里存了一个不断轮询的线程(非实时线程), 每隔usleeptime时间就会执行一次query_function, 线程实现见threadtools里的ScopedThread类(似乎作者正在重构这部分, 可能还不完善)
 
+
+## controller.h部分
+
+决定是TCP接口还是websocket接口的宏是`ENABLE_IP_INTERFACE`和`ENABLE_WEBSOCKET_INTERFACE`, 在controller.h的504行开始
+
+TCP接口的入口在legacy_network/connection.cpp里的`Connection::read_handler(const asio::error_code &error, size_t size)`, 里面调用了`CommandParser::parse_cmd`函数来parse xml数据包
+
+websocket接口的入口在websocket/connection.h里的`Connection::on_message(message_ptr msg)`
