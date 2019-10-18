@@ -46,9 +46,26 @@ command类型有以下这些:
     
 }
 ```
-5. mod-src
-6. del-src
-7. load-scene
+5. mod-src, 要求value是JSON Object类型, 格式如下
+```
+{
+  id: { // id为String类型
+    "active": Bool,
+    "pos": [x,y,z],
+    "rot": [x,y,z,w],
+    "volume": Number,
+    "mute": Bool,
+    "name": String,
+    "model": String,
+    "fixed": Bool,
+  },
+  id: { // 其他的source id
+     // ....
+  }
+}
+```
+6. del-src, 要求是JSON Array类型, 内部元素是要删除的source id
+7. load-scene, 要求是String类型, 是scene的file name
 8. save-scene 未实现
 9. time 未实现
 
@@ -59,3 +76,12 @@ if (!control)
     control = _controller.take_control();
 }
 ```
+
+创建新的source, 代码在controller.h 第1996行, `_new_source`这个函数
+```c++
+Controller<Renderer>::_new_source(id_t requested_id, const std::string& name
+      , const std::string& model, const std::string& file_name_or_port_number
+      , int channel, const Pos& position, const Rot& rotation, bool fixed
+      , float volume, bool mute, const std::string& properties_file)
+```
+
