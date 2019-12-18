@@ -26,10 +26,10 @@ command类型有以下这些:
     "tracker" :                      String,
 }
 ```
-4. new-src, 要求value是Array类型, Array里的元素为JSON Object, 格式如下
+4. new-src, 要求value是JSON Object类型, 格式如下
 ```
 {
-    "id": String, // source ID
+  "source的id": { // 此处的key为source的id，string类型
     "name": String, // source name
     "model": String, // source model
     "audio-file": String,
@@ -43,13 +43,17 @@ command类型有以下这些:
     "properties-file": String,
     // audio_file 和 port_number中只能有一个
     // port_number && channel中只能有一个
-    
+  },
+  "source的id": {
+    // ... ...
+  },
+  // ... ...
 }
 ```
 5. mod-src, 要求value是JSON Object类型, 格式如下
 ```
 {
-  id: { // id为String类型
+  "source的id": { // String类型
     "active": Bool,
     "pos": [x,y,z],
     "rot": [x,y,z,w],
@@ -59,7 +63,7 @@ command类型有以下这些:
     "model": String,
     "fixed": Bool,
   },
-  id: { // 其他的source id
+  "source的id": { // 其他的source id
      // ....
   }
 }
