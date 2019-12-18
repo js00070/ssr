@@ -1,7 +1,5 @@
-.. ****************************************************************************
- * Copyright © 2012-2014 Institut für Nachrichtentechnik, Universität Rostock *
- * Copyright © 2006-2014 Quality & Usability Lab,                             *
- *                       Telekom Innovation Laboratories, TU Berlin           *
+/******************************************************************************
+ * Copyright © 2019 SSR Contributors                                          *
  *                                                                            *
  * This file is part of the SoundScape Renderer (SSR).                        *
  *                                                                            *
@@ -22,17 +20,44 @@
  * variety of rendering algorithms.                                           *
  *                                                                            *
  * http://spatialaudio.net/ssr                           ssr@spatialaudio.net *
- ******************************************************************************
+ ******************************************************************************/
 
-SoundScape Renderer User Manual
-===============================
+/// @file
+/// A FUDI server for communicating with Puredata.
 
-.. toctree::
+#ifndef SSR_FUDI_SERVER_H
+#define SSR_FUDI_SERVER_H
 
-   general
-   installation
-   operation
-   renderers
-   gui
-   network
-   issues
+#include <asio.hpp>
+
+namespace ssr
+{
+
+namespace api { struct Publisher; }
+
+namespace fudi
+{
+
+class Server
+{
+public:
+  explicit Server(api::Publisher& controller, short port);
+  ~Server();
+
+private:
+  void _do_accept();
+
+  api::Publisher& _controller;
+  // TODO: io_context is not yet supported in Asio 1.10
+  //asio::io_context _io_context;
+  asio::io_service _io_service;
+  asio::ip::tcp::acceptor _acceptor;
+  asio::ip::tcp::socket _socket;
+  std::thread _thread;
+};
+
+}  // namespace fudi
+
+}  // namespace ssr
+
+#endif

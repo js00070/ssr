@@ -1,7 +1,5 @@
-.. ****************************************************************************
- * Copyright © 2012-2014 Institut für Nachrichtentechnik, Universität Rostock *
- * Copyright © 2006-2014 Quality & Usability Lab,                             *
- *                       Telekom Innovation Laboratories, TU Berlin           *
+/******************************************************************************
+ * Copyright © 2019 SSR Contributors                                          *
  *                                                                            *
  * This file is part of the SoundScape Renderer (SSR).                        *
  *                                                                            *
@@ -22,17 +20,20 @@
  * variety of rendering algorithms.                                           *
  *                                                                            *
  * http://spatialaudio.net/ssr                           ssr@spatialaudio.net *
- ******************************************************************************
+ ******************************************************************************/
 
-SoundScape Renderer User Manual
-===============================
+/// @file
+/// FUDI subscriber (implementation).
 
-.. toctree::
+// This separate .cpp file avoids cyclic dependencies with the Connection class
 
-   general
-   installation
-   operation
-   renderers
-   gui
-   network
-   issues
+#include "connection.h"
+#include "subscriber.h"
+
+using ssr::fudi::Subscriber;
+
+void
+Subscriber::_send_buffer(std::shared_ptr<buffer_t> buffer)
+{
+  _connection.write(std::move(buffer));
+}

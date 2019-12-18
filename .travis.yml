@@ -24,6 +24,9 @@ addons:
       - jackd1
       - pkg-config
       - libtool
+      - libmysofa-dev
+      # libfmt >= 5 is needed, which is in Ubuntu disco
+      #- libfmt-dev
   homebrew:
     update: true
     packages:
@@ -37,6 +40,10 @@ addons:
       - libsndfile
       - libxml2
       - qt
+      - vrpn
+      - fmt
+      # libmysofa needs this:
+      - cunit
       # using brew, it's not possible to install needed perl dependencies for
       # help2man (Locale::gettext), therefore best disabled for now
       #- help2man
@@ -91,43 +98,39 @@ matrix:
           packages:
             - clang-8
             - *default-packages
-    - name: macOS with Xcode11/Clang
+    - name: macOS 10.14 with Xcode11.2.1/Clang
+      os: osx
+      osx_image: xcode11.2
+      env: LIBXML_CFLAGS=-I/Applications/Xcode-11.2.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include/libxml2
+    - name: macOS 10.14 with Xcode11/Clang
       os: osx
       osx_image: xcode11
-      env: BREW_WORKAROUND=yes
-    - name: macOS with Xcode10.3/Clang
+      env: LIBXML_CFLAGS=-I/Applications/Xcode-11.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include/libxml2
+    - name: macOS 10.14 with Xcode10.3/Clang
       os: osx
       osx_image: xcode10.3
-      env: BREW_WORKAROUND=yes
-    - name: macOS with Xcode10.1/Clang
+      env: LIBXML_CFLAGS=-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include/libxml2
+    - name: macOS 10.13 with Xcode10.1/Clang
       os: osx
       osx_image: xcode10.1
 
 before_install:
-  # https://github.com/Homebrew/brew/issues/5068#issuecomment-429984836
-  - if [ "$BREW_WORKAROUND" = yes ]; then sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target / ; fi
+  - if [ "$TRAVIS_OS_NAME" = osx ]; then brew link qt --force; fi
+
+install:
+  - ci/build-deps.sh
 
 before_script:
-  - ci/build-deps.sh
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig:/usr/local/opt/qt/lib/pkgconfig:/usr/local/lib/pkgconfig; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PATH="/usr/local/opt/qt/bin:$PATH"; fi
   - ./autogen.sh
+  # NB: browser-gui is tested with CircleCI
+  - ./configure --enable-gui --enable-ip-interface --enable-websocket-interface --enable-fudi-interface --enable-ecasound --enable-sofa --enable-polhemus --enable-razor --enable-vrpn --enable-intersense --disable-browser-gui
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./configure; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./configure --prefix='/usr'; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then make; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then make && sudo make install; fi
+  - make && sudo make install
 
 after_failure:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ls -alhv /usr/bin/ |grep -E "(clang|gcc|g\+\+)"; fi
-  - if [[ -f config.log ]]; then cat config.log; fi
-
-branches:
-  only:
-    - master
-    - networking-with-osc
-    - travis-integration
+  - if [ "$TRAVIS_OS_NAME" = linux ]; then ls -alhv /usr/bin/ | grep -E "(clang|gcc|g\+\+)"; fi
+  - if [ -f config.log ]; then cat config.log; fi
 
 notifications:
   email: false

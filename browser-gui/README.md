@@ -1,22 +1,48 @@
 Browser-based 3D GUI for the SSR
 ================================
 
-All necessary files should be included in the official SSR releases.
-The following steps are only needed if you want to re-build those files from
-scratch.
+The auto-generated files for the browser GUI are contained in the tarball within
+the `data/websocket_resources` directory.
 
+When running `make install`, these files are copied to
+`/usr/local/share/ssr/websocket_resources`
+(unless a different `--prefix` has been specified).
 
-Install Yarn: https://yarnpkg.com/en/docs/install
-(Note that the official Debian/Ubuntu package is called `yarnpkg` and the
-executable is also called `yarnpkg` and not `yarn` like it is used below!)
+Given that the WebSocket interface is enabled, the SSR will automatically serve
+the resources for the 3D GUI.
+Simply connect with a browser to http://localhost:9422/index.html.
 
-Install everything else:
+You can change the server port with the option `--websocket-server=9999`
+(or whatever port you want to use).
+
+Building the Files
+------------------
+
+If you want to build the files yourself,
+you need to install the [Yarn] package manager.
+Note that the official Debian/Ubuntu package is called `yarnpkg` and the
+executable is also called `yarnpkg` and not `yarn`!
+
+[Yarn]: https://yarnpkg.com/en/docs/install
+
+If `yarn` (or `yarnpkg`) is available, the browser GUI resources are
+automatically created when running `make`.
+If you want to make generating the GUI files explicit, use
+
+    ./configure --enable-browser-gui
+
+If you make changes to the source files,
+you'll have to run `make` and `make install` again.
+
+During Development
+------------------
+
+You can also build the files outside the SSR build system,
+i.e. without using `make` and `make install`.
+
+Initially, you need to install all necessary `npm` packages:
 
     yarn install
-
-To build the hole shebang, use:
-
-    yarn run build
 
 During development, it is very handy if any change to the source files is
 detected and the generated files are updated automatically.

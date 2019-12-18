@@ -28,10 +28,13 @@
 #ifndef SSR_GEOMETRY_H
 #define SSR_GEOMETRY_H
 
-#include <cmath>  // for std::sin, std::cos, std::sqrt, ...
+#include <optional>
+#include <cmath>  // for std::asin(), std::atan2()
 
 #include <gml/vec.hpp>
 #include <gml/quaternion.hpp>
+#include <gml/mat.hpp>
+#include <gml/util.hpp>  // for gml::degrees(), gml::radians()
 
 #include "api.h"  // for Pos and Rot
 
@@ -66,35 +69,69 @@ struct quat : gml::quat
   }
 };
 
-/// Build a unit quaternion representing the rotation
-/// from u to v. The input vectors need not be normalised.
-/// From http://lolengine.net/blog/2014/02/24/quaternion-from-two-vectors-final
-inline quat fromtwovectors(vec3 u, vec3 v)
+inline quat normalize(const quat& q)
 {
-    float norm_u_norm_v = std::sqrt(gml::dot(u, u) * gml::dot(v, v));
-    float real_part = norm_u_norm_v + gml::dot(u, v);
-    vec3 w;
-
-    if (real_part < 1.e-6f * norm_u_norm_v)
-    {
-        /* If u and v are exactly opposite, rotate 180 degrees
-         * around an arbitrary orthogonal axis. Axis normalisation
-         * can happen later, when we normalise the quaternion. */
-        real_part = 0.0f;
-        w = std::abs(u[0]) > std::abs(u[2]) ? vec3(-u[1],  u[0], 0.f)
-                                            : vec3(  0.f, -u[2], u[1]);
-    }
-    else
-    {
-        /* Otherwise, build quaternion the standard way. */
-        w = gml::cross(u, v);
-    }
-    return gml::normalize(quat(real_part, w));
+  return gml::normalize(q);
 }
 
-inline quat look_at(vec3 from, vec3 to)
+/// See https://AudioSceneDescriptionFormat.readthedocs.io/quaternions.html
+inline quat angles2quat(float azimuth, float elevation, float roll)
 {
-  return fromtwovectors({0.0f, 1.0f, 0.0f}, to - from);
+  return normalize(
+    gml::qrotate(gml::radians(azimuth),   {0.0f, 0.0f, 1.0f}) *
+    gml::qrotate(gml::radians(elevation), {1.0f, 0.0f, 0.0f}) *
+    gml::qrotate(gml::radians(roll),      {0.0f, 1.0f, 0.0f}));
+}
+
+/// See https://AudioSceneDescriptionFormat.readthedocs.io/quaternions.html
+inline std::array<float, 3> quat2angles(const Rot& rot)
+{
+  // NB: Rot uses xyzw convention, math derivations use abcd (= wxyz):
+  auto [b, c, d, a] = rot;
+  auto sin_elevation = 2 * (a * b + c * d);
+  if (0.999999f < sin_elevation)
+  {
+    // elevation ~= 90°
+    return {
+      gml::degrees(std::atan2(2 * (a * c + b * d), 2 * (a * b - c * d))),
+      90.0f,
+      0.0f};
+  }
+  else if (sin_elevation < -0.999999f)
+  {
+    // elevation ~= -90°
+    return {
+      gml::degrees(std::atan2(-2 * (a * c + b * d), 2 * (c * d - a * b))),
+      -90.0f,
+      0.0f
+    };
+  }
+  return {
+    gml::degrees(std::atan2(2 * (a * d - b * c), 1 - 2 * (b*b + d*d))),
+    gml::degrees(std::asin(sin_elevation)),
+    gml::degrees(std::atan2(2 * (a * c - b * d), 1 - 2 * (b*b + c*c)))
+  };
+}
+
+inline std::optional<quat> look_rotation(vec3 from, vec3 to)
+{
+  auto y = to - from;
+  auto y_length = length(y);
+  if (y_length < 0.000001f)
+  {
+    return std::nullopt;
+  }
+  y /= y_length;
+  vec3 up{0.0f, 0.0f, 1.0f};
+  if (0.999999f < std::abs(dot(y, up)))
+  {
+    return std::nullopt;
+  }
+  auto x = cross(y, up);
+  x = normalize(x);
+  auto z = cross(x, y);
+  auto rotation_matrix = gml::mat3x3{x, y, z};
+  return normalize(gml::qdecomposeRotate(gml::mat4x4{rotation_matrix}));
 }
 
 }  // namespace ssr

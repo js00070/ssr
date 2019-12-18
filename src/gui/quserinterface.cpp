@@ -384,13 +384,13 @@ void ssr::QUserInterface::_processing_button_pressed()
 /// This slot is called when the \a pause \a button was clicked by the user.
 void ssr::QUserInterface::_pause_button_pressed()
 {
-  _controller.take_control()->transport_stop();
+  _controller.take_control()->transport_rolling(false);
 }
 
 /// This slot is called when the \a play \a button was clicked by the user.
 void ssr::QUserInterface::_play_button_pressed()
 {
-  _controller.take_control()->transport_start();
+  _controller.take_control()->transport_rolling(true);
 }
 
 /** This function is called whenever the fiel menu actions (open/close etc.)
@@ -1136,9 +1136,7 @@ void ssr::QUserInterface::keyPressEvent(QKeyEvent *event)
   case Qt::Key_Down: _window_y_offset += 0.1f; update(); break;
   case Qt::Key_Left: _window_x_offset += 0.1f; update(); break;
   case Qt::Key_Right: _window_x_offset -= 0.1f; update(); break;
-  case Qt::Key_Space: if (_scene.is_playing()) _controller.take_control()->transport_stop();
-                      else _controller.take_control()->transport_start();
-                      break;
+  case Qt::Key_Space: _controller.take_control()->transport_rolling(!_scene.is_playing()); break;
   case Qt::Key_Backspace: _skip_back(); break;
 
     // actions related to sources
@@ -1151,6 +1149,11 @@ void ssr::QUserInterface::keyPressEvent(QKeyEvent *event)
   case Qt::Key_S: if ( event->modifiers() == Qt::ControlModifier )
                   {
                     _save_file_as();
+                  }
+                  else if ( event->modifiers() == Qt::ShiftModifier )
+                  {
+                    _unsolo_all_sources();
+                    _toggle_solo_state_of_selected_sources();
                   }
                   else if (_selected_sources_map.empty())
                   {
@@ -1203,7 +1206,7 @@ void ssr::QUserInterface::keyPressEvent(QKeyEvent *event)
         close();
       else
         break;}
-  case Qt::Key_Escape: close();
+  case Qt::Key_Q: {if (_ctrl_pressed) close();}
   } // switch
 }
 

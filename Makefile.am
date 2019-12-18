@@ -5,7 +5,7 @@
 ## comments starting with a single # are copied to Makefile.in (and afterwards
 ## to Makefile), comments with ## are dropped.
 
-SUBDIRS = src man data
+SUBDIRS = src man data browser-gui
 
 ## only entered for "make dist", "make distclean" and "make maintainer-clean":
 ##DIST_SUBDIRS = $(SUBDIRS) another_dir
@@ -78,9 +78,10 @@ dist_noinst_DATA = \
 	flext/hrirs_kemar_min_phase_eq.wav \
 	flext/wfs_prefilter_120_1500_44100.wav \
 	pd/README.md \
+	pd/ssrclient.pd \
 	pd/slaxml.lua \
-	pd/ssrclient-help.pd \
-	pd/ssrclient.pd_lua
+	pd/legacy_ssrclient-help.pd \
+	pd/legacy_ssrclient.pd_lua
 
 dist_noinst_SCRIPTS = flext/startpd.sh
 

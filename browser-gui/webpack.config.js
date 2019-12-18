@@ -1,16 +1,17 @@
 const path = require('path');
 const webpack = require('webpack');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const DIST_PATH = 'dist';
+const NODE_MODULES = process.env.NODE_PATH || path.join(__dirname, 'node_modules');
 
 module.exports = {
   entry: './src/index.js',
   output: {
-    filename: '[name].[contenthash].js',
-    path: path.resolve(__dirname, DIST_PATH),
-    sourceMapFilename: 'sourcemaps/[file].map',
+    filename: 'chunks/[name].[contenthash].js',
+    // This is set when called from the Makefile:
+    path: undefined,
+    sourceMapFilename: '[file].map',
   },
   target: 'web',
   module: {
@@ -30,26 +31,29 @@ module.exports = {
     ],
   },
   resolve: {
+    modules: [NODE_MODULES],
     alias: {
       // See https://stackoverflow.com/a/44960831/
-      'three-examples': path.join(__dirname, './node_modules/three/examples/js')
+      'three-examples': path.join(NODE_MODULES, 'three/examples/js')
     },
   },
+  resolveLoader: {
+    modules: [NODE_MODULES],
+  },
   plugins: [
-    new CleanWebpackPlugin([DIST_PATH]),
     new HtmlWebpackPlugin({
-      title: 'SoundScape Renderer'
+      title: 'SoundScape Renderer',
+      meta: {
+        viewport: 'width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, shrink-to-fit=no',
+      }
     }),
-    new webpack.HashedModuleIdsPlugin()
   ],
   devtool: 'source-map',
-  devServer: {
-    contentBase: DIST_PATH
-  },
   mode: 'production',
   optimization: {
-    //runtimeChunk: 'single',  // Separate chunk for webpack runtime
-    runtimeChunk: true,  // Separate chunk for webpack runtime (per entry)
+    moduleIds: 'hashed',
+    runtimeChunk: 'single',  // Separate chunk for webpack runtime
+    //runtimeChunk: true,  // Separate chunk for webpack runtime (per entry)
     splitChunks: {
       chunks: 'all',
       //chunks: 'initial',

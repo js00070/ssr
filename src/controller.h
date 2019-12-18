@@ -67,6 +67,9 @@
 #ifdef ENABLE_WEBSOCKET_INTERFACE
 #include "websocket/server.h"  // for ws::Server
 #endif
+#ifdef ENABLE_FUDI_INTERFACE
+#include "fudi/server.h"  // for fudi::Server
+#endif
 
 #include "tracker.h"
 #ifdef ENABLE_INTERSENSE
@@ -243,9 +246,9 @@ class Controller : public api::Publisher
     /// SceneControlEvents, the rest are arguments to said member function.
     // NB: Args must be convertible to FuncArgs, but they don't necessarily have
     //     to be the same types.
-    template<typename R, typename... FuncArgs, typename... Args>
+    template<typename... FuncArgs, typename... Args>
     void _publish(api::SceneControlEvents* initiator
-        , R (api::SceneControlEvents::*f)(FuncArgs...), Args&&... args)
+        , void (api::SceneControlEvents::*f)(FuncArgs...), Args&&... args)
     {
       // TODO: check if sender is allowed to move source?
 
@@ -263,9 +266,9 @@ class Controller : public api::Publisher
 
     /// Overload for SceneControlEvents to be sent to the "leader".
     /// The first argument is a dummy argument for selecting this overload.
-    template<typename R, typename... FuncArgs, typename... Args>
+    template<typename... FuncArgs, typename... Args>
     void _publish(ToLeaderTag*
-        , R (api::SceneControlEvents::*f)(FuncArgs...), Args&&... args)
+        , void (api::SceneControlEvents::*f)(FuncArgs...), Args&&... args)
     {
       assert(_conf.follow);
       try { _call_leader(f, std::forward<Args>(args)...); }
@@ -275,8 +278,8 @@ class Controller : public api::Publisher
     /// Overload for all events without options to suppress own messages.
     /// Those are never sent to the "leader", therefore it is not allowed to use
     /// this for SceneControlEvents on a "follower".
-    template<typename R, typename C, typename... FuncArgs, typename... Args>
-    void _publish(R (C::*f)(FuncArgs...), Args&&... args)
+    template<typename C, typename... FuncArgs, typename... Args>
+    void _publish(void (C::*f)(FuncArgs...), Args&&... args)
     {
       // NB: Nothing is sent to the "leader"
 
@@ -321,6 +324,9 @@ class Controller : public api::Publisher
     Scene _scene;
     LegacyScene _legacy_scene;
 
+    float _cpu_load{};
+    uint32_t _transport_frame{};
+
     std::tuple<
       Subscribers<api::BundleEvents>,
       Subscribers<api::SceneControlEvents>,
@@ -351,6 +357,9 @@ class Controller : public api::Publisher
 #endif
 #ifdef ENABLE_WEBSOCKET_INTERFACE
     std::unique_ptr<ws::Server> _websocket_interface;
+#endif
+#ifdef ENABLE_FUDI_INTERFACE
+    std::unique_ptr<fudi::Server> _fudi_interface;
 #endif
     std::unique_ptr<Tracker> _tracker;
 
@@ -487,10 +496,6 @@ Controller<Renderer>::Controller(int argc, char* argv[])
         , _conf.auto_rotate_sources);
     _publish(&api::SceneInformationEvents::sample_rate
         , _renderer.sample_rate());
-    bool is_rolling;
-    std::tie(is_rolling, std::ignore) = _renderer.get_transport_state();
-    // This is may not be necessary since the renderer continuously sends this?
-    _publish(&api::SceneInformationEvents::transport_rolling, is_rolling);
   }
 
   if (_conf.freewheeling)
@@ -524,6 +529,14 @@ Controller<Renderer>::Controller(int argc, char* argv[])
   }
 #endif // ENABLE_WEBSOCKET_INTERFACE
 
+#ifdef ENABLE_FUDI_INTERFACE
+  if (_conf.fudi_server)
+  {
+    SSR_VERBOSE("Starting FUDI server with port " << _conf.fudi_port);
+    _fudi_interface = std::make_unique<fudi::Server>(*this, _conf.fudi_port);
+  }
+#endif // ENABLE_FUDI_INTERFACE
+
   if (_conf.follow && _conf.scene_file_name != "")
   {
     // TODO: if "follower": connect to "leader" before loading scene
@@ -554,12 +567,6 @@ class Controller<Renderer>::query_state
     // NB: This is executed in the audio thread
     void query()
     {
-      if (!_controller._conf.follow)
-      {
-        _state = _renderer.get_transport_state();
-      }
-      _cpu_load = _renderer.get_cpu_load();
-
       auto output_list = output_list_t(_renderer.get_output_list());
 
       _master_level = {};
@@ -603,16 +610,25 @@ class Controller<Renderer>::query_state
 
       if (!_controller._conf.follow)
       {
-        _controller._publish(&api::TransportFrameEvents::transport_frame
-            , _state.second);
-        bool rolling{_state.first};
+        auto [rolling, frame] = _renderer.get_transport_state();
+        if (frame != _controller._transport_frame)
+        {
+          _controller._publish(&api::TransportFrameEvents::transport_frame
+              , frame);
+          _controller._transport_frame = frame;
+        }
         if (rolling != _controller._scene.transport_is_rolling())
         {
-          _controller._publish(&api::SceneInformationEvents::transport_rolling
+          _controller._publish(&api::SceneControlEvents::transport_rolling
               , rolling);
         }
       }
-      _controller._publish(&api::CpuLoad::cpu_load, _cpu_load);
+      auto cpu_load = _renderer.get_cpu_load();
+      if (cpu_load != _controller._cpu_load)
+      {
+        _controller._publish(&api::CpuLoad::cpu_load, cpu_load);
+        _controller._cpu_load = cpu_load;
+      }
       _controller._publish(&api::MasterMetering::master_level, _master_level);
 
       if (!_discard_source_levels)
@@ -663,8 +679,6 @@ class Controller<Renderer>::query_state
 
     Controller& _controller;
     const Renderer& _renderer;
-    std::pair<bool, uint32_t> _state;
-    float _cpu_load;
     typename Renderer::sample_type _master_level;
 
     source_levels_t _source_levels;
@@ -706,7 +720,7 @@ bool Controller<Renderer>::run()
   }
   else // without GUI
   {
-    this->take_control()->transport_start();
+    this->take_control()->transport_rolling(true);
     bool keep_running = true;
     while (keep_running)
     {
@@ -717,7 +731,7 @@ bool Controller<Renderer>::run()
           this->take_control()->reset_tracker();
           break;
         case 'p':
-          this->take_control()->transport_start();
+          this->take_control()->transport_rolling(true);
           break;
         case 'q':
           keep_running = false;
@@ -726,7 +740,7 @@ bool Controller<Renderer>::run()
           this->take_control()->transport_locate_frames(0);
           break;
         case 's':
-          this->take_control()->transport_stop();
+          this->take_control()->transport_rolling(false);
           break;
       }
     }
@@ -743,7 +757,7 @@ Controller<Renderer>::~Controller()
     auto control = this->take_control();
 
     // TODO: check if transport needs to be stopped
-    control->transport_stop();
+    control->transport_rolling(false);
 
     // NB: Scene is saved while holding the lock
     if (!_save_scene("ssr_scene_autosave.asd"))
@@ -1168,30 +1182,6 @@ public:
     }
   }
 
-  void transport_start() override
-  {
-    if constexpr (_is_leader)
-    {
-      _controller._renderer.transport_start();
-    }
-    else
-    {
-      _controller._call_leader(&api::Controller::transport_start);
-    }
-  }
-
-  void transport_stop() override
-  {
-    if constexpr (_is_leader)
-    {
-      _controller._renderer.transport_stop();
-    }
-    else
-    {
-      _controller._call_leader(&api::Controller::transport_stop);
-    }
-  }
-
   void transport_locate_frames(uint32_t time) override
   {
     if constexpr (_is_leader)
@@ -1228,6 +1218,29 @@ public:
   std::string get_source_id(unsigned source_number) const override
   {
     return _controller._scene.get_source_id(source_number);
+  }
+
+  // SceneControlEvents are inherited from CommonInterface, except:
+
+  void transport_rolling(bool rolling) override
+  {
+    if constexpr (_is_leader)
+    {
+      // NB: If (and only if) the transport state changes, it will be published
+      //     in query_state::update().
+      if (rolling)
+      {
+        _controller._renderer.transport_start();
+      }
+      else
+      {
+        _controller._renderer.transport_stop();
+      }
+    }
+    else
+    {
+      _controller._call_leader(&api::Controller::transport_rolling, rolling);
+    }
   }
 
   // RendererControlEvents
@@ -1267,7 +1280,12 @@ public:
     : CommonInterface<>(nullptr, controller)
   {}
 
-  // SceneControlEvents are inherited from CommonInterface
+  // SceneControlEvents are inherited from CommonInterface, except:
+
+  void transport_rolling(bool rolling) override
+  {
+    _controller._publish(&api::SceneControlEvents::transport_rolling, rolling);
+  }
 
   // SceneInformationEvents
 
@@ -1286,12 +1304,6 @@ public:
   {
     _controller._publish(&api::SceneInformationEvents::source_property
         , id, key, value);
-  }
-
-  void transport_rolling(bool rolling) override
-  {
-    _controller._publish(&api::SceneInformationEvents::transport_rolling
-        , rolling);
   }
 
   // TransportFrameEvents
@@ -1351,7 +1363,7 @@ private:
   std::unique_ptr<api::Subscription>
   bundle(api::BundleEvents* subscriber) override
   {
-    return _subscribe_helper(subscriber, [this, subscriber]() {
+    return _subscribe_helper(subscriber, [subscriber]() {
         subscriber->bundle_start();
     });
   }
@@ -1391,7 +1403,9 @@ private:
   std::unique_ptr<api::Subscription>
   transport_frame(api::TransportFrameEvents* subscriber) override
   {
-    return _subscribe_helper(subscriber);
+    return _subscribe_helper(subscriber, [this, subscriber]() {
+      subscriber->transport_frame(_controller._transport_frame);
+    });
   }
 
   std::unique_ptr<api::Subscription>
@@ -1415,7 +1429,9 @@ private:
   std::unique_ptr<api::Subscription>
   cpu_load(api::CpuLoad* subscriber) override
   {
-    return _subscribe_helper(subscriber);
+    return _subscribe_helper(subscriber, [this, subscriber]() {
+      subscriber->cpu_load(_controller._cpu_load);
+    });
   }
 
   Controller<Renderer>& _controller;
@@ -2113,8 +2129,10 @@ Controller<Renderer>::_orient_source_toward_reference(id_t id)
     // NB: Reference offset is not taken into account
     //     (because it is a property of the renderer, not the scene)
     auto ref_pos = _scene.get_reference_position();
-    _publish(&api::SceneControlEvents::source_rotation
-        , id, look_at(src->position, ref_pos));
+    if (auto rot = look_rotation(src->position, ref_pos))
+    {
+      _publish(&api::SceneControlEvents::source_rotation, id, *rot);
+    }
   }
   else
   {

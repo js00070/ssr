@@ -184,6 +184,7 @@ private:
     {
       StringBuffer buffer{&_out_allocator};
       Writer writer(buffer, &_out_allocator);
+      writer.SetMaxDecimalPlaces(5);
       commands.Accept(writer);
       _server.send(_hdl, buffer.GetString(), websocketpp::frame::opcode::text);
       SSR_VERBOSE3("output allocator usage: " << _out_allocator.Size());
@@ -772,14 +773,7 @@ Connection::on_message(message_ptr msg)
                 << member.value);
             return;
           }
-          if (member.value.GetBool())
-          {
-            control->transport_start();
-          }
-          else
-          {
-            control->transport_stop();
-          }
+          control->transport_rolling(member.value.GetBool());
         }
         else if (member.name == "frame")
         {
@@ -808,23 +802,20 @@ Connection::on_message(message_ptr msg)
     }
     else if (command == "new-src")
     {
+      if (!value.IsObject())
+      {
+        SSR_ERROR("Expected JSON object with new sources, not " << value);
+        return;
+      }
       if (!control)
       {
         control = _controller.take_control();
       }
-      if (!value.IsArray())
+      for (const auto& source: value.GetObject())
       {
-        SSR_ERROR("Expected list of new sources, not " << value);
-        return;
-      }
-      for (const auto& source: value.GetArray())
-      {
-        if (!source.IsObject())
-        {
-          SSR_ERROR("Expected list of objects, not " << value);
-          return;
-        }
-        std::string id;
+        assert(source.name.IsString());
+        const std::string id = source.name.GetString();
+
         std::string name;
         std::string model;
         std::optional<std::string> audio_file;
@@ -836,18 +827,15 @@ Connection::on_message(message_ptr msg)
         float volume{1};
         bool mute{false};
         std::string properties_file;
-        for (const auto& member: source.GetObject())
+
+        if (!source.value.IsObject())
         {
-          if (member.name == "id")
-          {
-            if (!member.value.IsString())
-            {
-              SSR_ERROR("Invalid source ID: " << member.value);
-              return;
-            }
-            id = member.value.GetString();
-          }
-          else if (member.name == "name")
+          SSR_ERROR("New source must be a JSON object, not " << source.value);
+          return;
+        }
+        for (const auto& member: source.value.GetObject())
+        {
+          if (member.name == "name")
           {
             if (!member.value.IsString())
             {
@@ -980,6 +968,12 @@ Connection::on_message(message_ptr msg)
     }
     else if (command == "mod-src")
     {
+      if (!value.IsObject())
+      {
+        SSR_ERROR("Expected JSON object, not " << value);
+        return;
+      }
+
       if (!control)
       {
         control = _controller.take_control();

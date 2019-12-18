@@ -1,7 +1,7 @@
 -- Pure Data (Pd) external for remote-controlling the SoundScape Renderer (SSR)
 -- Matthias Geier, Sept. 2014
 
-local SsrClient = pd.Class:new():register("ssrclient")
+local SsrClient = pd.Class:new():register("legacy_ssrclient")
 
 -- XML parser from http://github.com/Phrogz/SLAXML
 local SLAXML = require("slaxml")
@@ -194,7 +194,7 @@ function SsrClient:in_1(sel, atoms)
         return
     end
     str = str .. '</request>\0'  -- terminated with a binary zero
-    self:outlet(2, "list", {str:byte(1, #str)})  -- convert to ASCII numbers
+    self:outlet(2, "send", {str:byte(1, #str)})  -- convert to ASCII numbers
 end
 
 -- collect numbers in self.buffer. If a zero comes in, parse the whole string.

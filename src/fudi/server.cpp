@@ -1,7 +1,5 @@
-.. ****************************************************************************
- * Copyright © 2012-2014 Institut für Nachrichtentechnik, Universität Rostock *
- * Copyright © 2006-2014 Quality & Usability Lab,                             *
- *                       Telekom Innovation Laboratories, TU Berlin           *
+/******************************************************************************
+ * Copyright © 2019 SSR Contributors                                          *
  *                                                                            *
  * This file is part of the SoundScape Renderer (SSR).                        *
  *                                                                            *
@@ -22,17 +20,50 @@
  * variety of rendering algorithms.                                           *
  *                                                                            *
  * http://spatialaudio.net/ssr                           ssr@spatialaudio.net *
- ******************************************************************************
+ ******************************************************************************/
 
-SoundScape Renderer User Manual
-===============================
+/// @file
+/// FUDI server (implementation).
 
-.. toctree::
+#include <thread>
 
-   general
-   installation
-   operation
-   renderers
-   gui
-   network
-   issues
+#include "connection.h"
+
+#include "server.h"
+
+using ssr::fudi::Server;
+using asio::ip::tcp;
+
+Server::Server(api::Publisher& controller, short port)
+  : _controller{controller}
+  , _io_service{}
+  , _acceptor{_io_service, tcp::endpoint(tcp::v4(), port)}
+  , _socket{_io_service}
+{
+  _do_accept();
+  _thread = std::thread{[this](){ _io_service.run(); }};
+}
+
+Server::~Server()
+{
+  _io_service.stop();
+  if (_thread.joinable()) { _thread.join(); }
+}
+
+void
+Server::_do_accept()
+{
+  // The signature has changed between Asio 1.10 and 1.12
+  // TODO: use the new signature once Travis-CI has caught up
+  _acceptor.async_accept(
+      _socket,
+      [this](std::error_code ec)
+      {
+        if (!ec)
+        {
+          std::make_shared<Connection>(
+              std::move(_socket), _controller)->start();
+        }
+        _do_accept();
+      });
+}

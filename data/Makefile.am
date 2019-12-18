@@ -41,11 +41,16 @@ nobase_dist_pkgdata_DATA = \
 	images/ssr_logo.png \
 	websocket_resources/ssr-test-client.html
 
+## the whole directory is distributed, including browser GUI files
+EXTRA_DIST = websocket_resources
+
 ## stuff that will end up either in $prefix/share/ssr/ or in $bundledir/Extras
 nobase_dist_extras_DATA = \
 	reproduction_setups/2.0.asd \
 	reproduction_setups/2.1.asd \
 	reproduction_setups/5.1.asd \
+	reproduction_setups/8channels.asd \
+	reproduction_setups/rostock_horizontal.asd \
 	reproduction_setups/rounded_rectangle.asd \
 	reproduction_setups/circle.asd \
 	reproduction_setups/loudspeaker_setup_with_nearly_all_features.asd \
@@ -57,6 +62,7 @@ nobase_dist_extras_DATA = \
 	impulse_responses/hrirs/hrirs_kemar_min_phase_eq.wav \
 	impulse_responses/hrirs/eq_filter_kemar_min_phase.wav \
 	impulse_responses/hrirs/hrirs_fabian_documentation.pdf \
+	impulse_responses/hrirs/README.md \
 	impulse_responses/wfs_prefilters/wfs_prefilter_120_1500_44100.wav \
 	impulse_responses/wfs_prefilters/wfs_prefilter_100_1300_44100.wav \
 	impulse_responses/wfs_prefilters/wfs_prefilter_100_1300_48000.wav \
